@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { clashDisplay, switzer } from "@/lib/fonts";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -18,7 +20,11 @@ export default function RootLayout({
       lang="en"
       className={`${clashDisplay.variable} ${switzer.variable}`}
     >
-      <body>{children}</body>
+      <body>
+        <Navbar />
+        {children}
+        <Footer />
+      </body>
     </html>
   );
 }
