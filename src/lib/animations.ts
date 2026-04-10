@@ -34,7 +34,7 @@ export const slideFromLeft = {
   visible: {
     opacity: 1,
     x: 0,
-    transition: { duration: 0.5, ease: EASE_OUT_EXPO },
+    transition: { duration: 0.6, ease: EASE_OUT_EXPO },
   },
 };
 

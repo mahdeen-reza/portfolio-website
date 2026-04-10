@@ -58,7 +58,7 @@ export default function Hero() {
             className="flex flex-wrap gap-3 justify-center lg:justify-start"
           >
             <Link
-              href="/#projects"
+              href="/projects"
               className="bg-terracotta text-cream font-body font-medium text-[13px] px-6 py-3 rounded-lg transition-all duration-200 hover:bg-terracotta-dark hover:scale-[1.02]"
             >
               View projects

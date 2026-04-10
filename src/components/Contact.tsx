@@ -6,7 +6,7 @@ import { fadeUp, staggerContainer } from "@/lib/animations";
 
 export default function Contact() {
   return (
-    <section id="contact" className="bg-cream py-20 md:py-28 scroll-mt-16">
+    <section id="contact" className="bg-cream py-24 md:py-32 scroll-mt-16">
       <div className="max-w-[1200px] mx-auto px-6 md:px-12 lg:px-16">
         <motion.div
           variants={staggerContainer}

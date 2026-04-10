@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { EASE_OUT_EXPO } from "@/lib/animations";
 
 const NAV_LINKS = [
-  { label: "Projects", href: "/#projects" },
+  { label: "Projects", href: "/projects" },
   { label: "About", href: "/#about" },
   { label: "Contact", href: "/#contact" },
 ];

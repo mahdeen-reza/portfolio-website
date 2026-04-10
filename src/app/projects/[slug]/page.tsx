@@ -37,7 +37,7 @@ export default async function CaseStudyPage({
         <div className="max-w-[800px] mx-auto px-6 md:px-12 lg:px-16">
           {/* Back link */}
           <Link
-            href="/#projects"
+            href="/projects"
             className="inline-block font-body text-[13px] font-medium text-terracotta transition-colors duration-200 hover:text-terracotta-dark mb-10"
           >
             &larr; Back to projects

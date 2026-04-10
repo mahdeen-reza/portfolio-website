@@ -11,6 +11,7 @@ export interface Project {
   tags: string[];
   github?: string;
   demo?: string;
+  featured?: boolean;
   role: string;
   status: string;
   sections: CaseStudySection[];
@@ -25,6 +26,7 @@ export const projects: Project[] = [
       "AI-powered internal tool automating Salesforce license analysis across 5 instances.",
     tags: ["AI", "TypeScript", "React", "Full-stack"],
     github: "https://github.com/mahdeen-reza/license-cleanup-agent-demo",
+    featured: true,
     role: "Creator & Lead Developer",
     status: "Shipped",
     sections: [
@@ -55,6 +57,7 @@ export const projects: Project[] = [
     tags: ["BigQuery", "Looker", "SQL", "Fivetran"],
     github: "https://github.com/mahdeen-reza/saas-license-monitor",
     demo: "https://mahdeen-reza.github.io/saas-license-monitor",
+    featured: true,
     role: "Architect & Builder",
     status: "Live",
     sections: [

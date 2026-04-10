@@ -29,9 +29,10 @@ Button text:      font-body font-medium text-[13px]
 Footer text:      font-body text-xs
 
 ## Architecture
-- Pages: src/app/page.tsx (home) | src/app/projects/[slug]/page.tsx (case studies)
+- Pages: src/app/page.tsx (home) | src/app/projects/page.tsx (all projects) | src/app/projects/[slug]/page.tsx (case studies)
+- Homepage flow: Hero → Marquee → Projects (preview, featured only) → Skills → About (bio-only) → Contact
 - Components: src/components/ — one file per component, "use client" only where needed
-- Data: src/lib/projects.ts — project metadata array, single source of truth for both homepage cards and case study pages
+- Data: src/lib/projects.ts — project metadata array with `featured?: boolean` flag for homepage preview
 - Fonts: src/lib/fonts.ts — next/font/local config
 - Animations: src/lib/animations.ts — shared motion variants (fadeUp, fadeIn, stagger, slideIn)
 - ScrollReveal: src/components/ScrollReveal.tsx — reusable whileInView wrapper for all scroll-triggered entrances
