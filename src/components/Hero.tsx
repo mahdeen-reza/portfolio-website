@@ -4,11 +4,13 @@ import Link from "next/link";
 import { motion, useScroll, useTransform } from "motion/react";
 import { useRef } from "react";
 import { EASE_OUT_EXPO, fadeUp, staggerContainer } from "@/lib/animations";
+import { usePreloaderDone } from "@/lib/usePreloaderDone";
 
 const headingLines = ["Building the", "systems behind", "the systems."];
 
 export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
+  const preloaderDone = usePreloaderDone();
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start start", "end start"],
@@ -25,7 +27,7 @@ export default function Hero() {
         <motion.div
           variants={staggerContainer}
           initial="hidden"
-          animate="visible"
+          animate={preloaderDone ? "visible" : "hidden"}
           className="flex flex-col gap-6 text-center lg:text-left"
         >
           {/* Heading — staggered lines */}
@@ -75,7 +77,7 @@ export default function Hero() {
         {/* Right column — photo placeholder with parallax */}
         <motion.div
           initial={{ opacity: 0, scale: 0.97 }}
-          animate={{ opacity: 1, scale: 1 }}
+          animate={preloaderDone ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.97 }}
           transition={{ duration: 0.8, ease: EASE_OUT_EXPO, delay: 0.4 }}
           style={{ y: photoY }}
           className="w-full max-w-[400px] lg:max-w-none"

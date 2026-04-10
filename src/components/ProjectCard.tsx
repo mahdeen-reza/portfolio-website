@@ -2,12 +2,12 @@
 
 import Link from "next/link";
 import { motion } from "motion/react";
-import { fadeUp } from "@/lib/animations";
+import { fadeUpLarge } from "@/lib/animations";
 import type { Project } from "@/lib/projects";
 
 export default function ProjectCard({ project }: { project: Project }) {
   return (
-    <motion.div variants={fadeUp}>
+    <motion.div variants={fadeUpLarge}>
       <Link
         href={`/projects/${project.slug}`}
         className="group block border border-white/10 bg-white/[0.03] rounded-xl p-6 md:p-8 transition-all duration-250 hover:bg-white/[0.06] hover:border-white/20 hover:-translate-y-0.5"

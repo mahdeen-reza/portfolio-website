@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "motion/react";
-import { fadeUp, staggerContainer } from "@/lib/animations";
+import { fadeUp, staggerContainerWide } from "@/lib/animations";
 import { projects } from "@/lib/projects";
 import ProjectCard from "@/components/ProjectCard";
 
@@ -33,7 +33,7 @@ export default function Projects() {
 
         {/* Cards */}
         <motion.div
-          variants={staggerContainer}
+          variants={staggerContainerWide}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-100px" }}

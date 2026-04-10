@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { EASE_OUT_EXPO } from "@/lib/animations";
+import { markPreloaderDone } from "@/lib/usePreloaderDone";
 
 const SESSION_KEY = "preloader-shown";
 
@@ -11,7 +12,10 @@ export default function Preloader() {
   const [phase, setPhase] = useState<"fade-in" | "hold" | "exit">("fade-in");
 
   useEffect(() => {
-    if (sessionStorage.getItem(SESSION_KEY)) return;
+    if (sessionStorage.getItem(SESSION_KEY)) {
+      markPreloaderDone();
+      return;
+    }
 
     // Lock scroll during preloader
     document.body.style.overflow = "hidden";
@@ -22,6 +26,7 @@ export default function Preloader() {
     const exitTimer = setTimeout(() => {
       setPhase("exit");
       sessionStorage.setItem(SESSION_KEY, "1");
+      markPreloaderDone();
     }, 600 + 800);
     const removeTimer = setTimeout(() => {
       setShow(false);
