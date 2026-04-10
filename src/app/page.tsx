@@ -1,6 +1,7 @@
 import Hero from "@/components/Hero";
 import Marquee from "@/components/Marquee";
 import Projects from "@/components/Projects";
+import About from "@/components/About";
 
 export default function Home() {
   return (
@@ -8,9 +9,7 @@ export default function Home() {
       <Hero />
       <Marquee />
       <Projects />
-      <section id="about" className="min-h-[50vh] bg-warm flex items-center justify-center scroll-mt-16">
-        <p className="font-display font-semibold text-[clamp(28px,4vw,48px)] text-dark/20">About</p>
-      </section>
+      <About />
       <section id="contact" className="min-h-[50vh] bg-cream flex items-center justify-center scroll-mt-16">
         <p className="font-display font-semibold text-[clamp(28px,4vw,48px)] text-dark/20">Contact</p>
       </section>
