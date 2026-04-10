@@ -1,0 +1,48 @@
+@import "tailwindcss";
+
+/* ── Design Tokens ── */
+@theme inline {
+  /* Colors */
+  --color-cream: #FAF9F6;
+  --color-dark: #1A1A1A;
+  --color-warm: #F0EDE6;
+  --color-terracotta: #B5654A;
+  --color-terracotta-hover: #D4A08A;
+  --color-terracotta-dark: #8B4332;
+  --color-charcoal: #3D3D3A;
+  --color-muted: #6B6B6B;
+  --color-border: #E0DED8;
+
+  /* Fonts (CSS variables injected by next/font on <html>) */
+  --font-display: var(--font-clash), system-ui, sans-serif;
+  --font-body: var(--font-switzer), system-ui, sans-serif;
+}
+
+/* ── Marquee Animation ── */
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* ── Global Styles ── */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--color-cream);
+  color: var(--color-dark);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── Selection ── */
+::selection {
+  background-color: var(--color-terracotta);
+  color: var(--color-cream);
+}
