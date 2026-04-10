@@ -12,10 +12,10 @@ function MarqueeTrack() {
     <div className="flex items-center shrink-0">
       {ITEMS.map((item, i) => (
         <span key={i} className="flex items-center shrink-0">
-          <span className="font-body font-medium text-[13px] uppercase tracking-[0.1em] text-cream/90 whitespace-nowrap">
+          <span className="font-body font-medium text-[12px] sm:text-[13px] uppercase tracking-[0.1em] text-cream/90 whitespace-nowrap">
             {item}
           </span>
-          <span className="mx-6 text-cream/40 text-[10px]">&#9670;</span>
+          <span className="mx-4 sm:mx-6 text-cream/40 text-[10px]">&#9670;</span>
         </span>
       ))}
     </div>
@@ -24,7 +24,7 @@ function MarqueeTrack() {
 
 export default function Marquee() {
   return (
-    <div className="bg-terracotta py-4 overflow-hidden">
+    <div className="bg-terracotta py-3 sm:py-4 overflow-hidden">
       <div
         className="flex w-max"
         style={{ animation: "marquee 35s linear infinite" }}

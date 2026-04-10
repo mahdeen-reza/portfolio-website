@@ -14,14 +14,14 @@ export default function Footer() {
           &copy; {new Date().getFullYear()} Mahdeen Reza
         </p>
 
-        <div className="flex items-center gap-6">
+        <div className="flex items-center gap-4 sm:gap-6">
           {FOOTER_LINKS.map((link) => (
             <Link
               key={link.label}
               href={link.href}
               target={link.href.startsWith("mailto:") ? undefined : "_blank"}
               rel={link.href.startsWith("mailto:") ? undefined : "noopener noreferrer"}
-              className="font-body text-xs text-muted transition-colors duration-200 hover:text-terracotta"
+              className="font-body text-xs text-muted transition-colors duration-200 hover:text-terracotta py-1.5"
             >
               {link.label}
             </Link>

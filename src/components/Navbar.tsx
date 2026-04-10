@@ -72,7 +72,7 @@ export default function Navbar() {
         {/* Mobile hamburger */}
         <button
           onClick={() => setMenuOpen(!menuOpen)}
-          className="md:hidden flex flex-col justify-center items-center w-8 h-8 gap-1.5"
+          className="md:hidden flex flex-col justify-center items-center w-11 h-11 -mr-1.5 gap-1.5"
           aria-label={menuOpen ? "Close menu" : "Open menu"}
         >
           <span
@@ -103,13 +103,13 @@ export default function Navbar() {
             transition={{ duration: 0.3, ease: EASE_OUT_EXPO }}
             className="md:hidden overflow-hidden bg-cream border-b border-border"
           >
-            <div className="px-6 py-6 flex flex-col gap-5">
+            <div className="px-6 py-5 flex flex-col gap-1">
               {NAV_LINKS.map((link) => (
                 <Link
                   key={link.label}
                   href={link.href}
                   onClick={() => setMenuOpen(false)}
-                  className="font-body text-[15px] text-dark/80 transition-colors duration-200 hover:text-dark"
+                  className="font-body text-[15px] text-dark/80 transition-colors duration-200 hover:text-dark py-2"
                 >
                   {link.label}
                 </Link>
@@ -117,7 +117,7 @@ export default function Navbar() {
               <Link
                 href="/#contact"
                 onClick={() => setMenuOpen(false)}
-                className="font-body text-[15px] font-medium text-terracotta transition-colors duration-200 hover:text-terracotta-dark"
+                className="font-body text-[15px] font-medium text-terracotta transition-colors duration-200 hover:text-terracotta-dark py-2"
               >
                 Let&apos;s talk &rarr;
               </Link>

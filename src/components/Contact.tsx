@@ -43,7 +43,7 @@ export default function Contact() {
           {/* Links */}
           <motion.div
             variants={fadeUp}
-            className="flex flex-wrap items-center gap-4"
+            className="flex flex-wrap items-center gap-3 sm:gap-4"
           >
             <Link
               href="https://linkedin.com/in/mahdeen-reza"
@@ -55,7 +55,7 @@ export default function Contact() {
             </Link>
             <Link
               href="mailto:hello@mahdeenreza.com"
-              className="font-body text-[13px] text-dark/70 transition-colors duration-200 hover:text-terracotta"
+              className="font-body text-[13px] text-dark/70 transition-colors duration-200 hover:text-terracotta py-2"
             >
               hello@mahdeenreza.com
             </Link>
@@ -63,7 +63,7 @@ export default function Contact() {
               href="https://github.com/mahdeen-reza"
               target="_blank"
               rel="noopener noreferrer"
-              className="font-body text-[13px] text-dark/70 transition-colors duration-200 hover:text-terracotta"
+              className="font-body text-[13px] text-dark/70 transition-colors duration-200 hover:text-terracotta py-2"
             >
               GitHub
             </Link>

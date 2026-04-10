@@ -49,7 +49,7 @@ export default async function CaseStudyPage({
           </h1>
 
           {/* Metadata bar */}
-          <div className="flex flex-wrap gap-x-8 gap-y-3 pb-8 mb-12 border-b border-border">
+          <div className="flex flex-wrap gap-x-6 sm:gap-x-8 gap-y-4 pb-8 mb-12 border-b border-border">
             <div>
               <span className="block font-body text-[11px] uppercase tracking-[0.1em] text-muted mb-1">
                 Role
@@ -88,7 +88,7 @@ export default async function CaseStudyPage({
                     href={project.github}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="font-body text-sm text-dark/70 transition-colors duration-200 hover:text-terracotta"
+                    className="font-body text-sm text-dark/70 transition-colors duration-200 hover:text-terracotta py-1"
                   >
                     GitHub &rarr;
                   </Link>
@@ -98,7 +98,7 @@ export default async function CaseStudyPage({
                     href={project.demo}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="font-body text-sm text-dark/70 transition-colors duration-200 hover:text-terracotta"
+                    className="font-body text-sm text-dark/70 transition-colors duration-200 hover:text-terracotta py-1"
                   >
                     Live demo &rarr;
                   </Link>
