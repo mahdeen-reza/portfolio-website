@@ -6,9 +6,9 @@ import { motion, AnimatePresence } from "motion/react";
 import { EASE_OUT_EXPO } from "@/lib/animations";
 
 const NAV_LINKS = [
-  { label: "Projects", href: "/projects" },
-  { label: "About", href: "/#about" },
-  { label: "Contact", href: "/#contact" },
+  { label: "PROJECTS", href: "/projects" },
+  { label: "SKILLS", href: "/#skills" },
+  { label: "ABOUT", href: "/#about" },
 ];
 
 export default function Navbar() {
@@ -34,29 +34,29 @@ export default function Navbar() {
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled
-          ? "bg-cream/95 backdrop-blur-sm border-b border-border"
+          ? "bg-cream/95 backdrop-blur-sm"
           : "bg-transparent"
       }`}
     >
-      <div className="max-w-[1200px] mx-auto px-6 md:px-12 lg:px-16 flex items-center justify-between h-16">
+      <div className="max-w-[1600px] mx-auto px-6 md:px-12 lg:px-20 grid grid-cols-3 items-center h-18">
         {/* Logo */}
         <Link
           href="/"
-          className="border border-dark/20 rounded-md px-3.5 py-1.5 font-display font-semibold text-base tracking-[-0.02em] text-dark transition-colors duration-200 hover:border-dark/40"
+          className="justify-self-start bg-dark text-cream rounded-none px-4.5 py-2 font-display font-semibold text-[18px] tracking-[-0.02em] transition-colors duration-200 hover:bg-charcoal"
         >
-          Mahdeen Reza
+          Mahdeen Reza Amin
         </Link>
 
         {/* Desktop nav links */}
-        <div className="hidden md:flex items-center gap-8">
+        <div className="hidden md:flex items-center gap-10 justify-self-center">
           {NAV_LINKS.map((link) => (
             <Link
               key={link.label}
               href={link.href}
-              className="group relative font-body text-[13px] text-dark/80 transition-colors duration-200 hover:text-dark"
+              className="group relative font-body text-[16px] font-medium text-dark/70 tracking-[0.04em] transition-colors duration-200 hover:text-dark"
             >
               {link.label}
-              <span className="absolute left-0 -bottom-0.5 h-[1.5px] w-0 bg-terracotta transition-all duration-300 group-hover:w-full" />
+              <span className="absolute left-0 -bottom-0.5 h-[2px] w-0 bg-terracotta transition-all duration-300 group-hover:w-full" />
             </Link>
           ))}
         </div>
@@ -64,15 +64,15 @@ export default function Navbar() {
         {/* Desktop CTA */}
         <Link
           href="/#contact"
-          className="hidden md:block font-body text-[13px] font-medium text-terracotta transition-colors duration-200 hover:text-terracotta-dark"
+          className="hidden md:block justify-self-end bg-warm text-dark font-body text-[16px] font-medium tracking-[0.04em] px-4.5 py-2 rounded-lg transition-colors duration-200 hover:bg-terracotta-dark hover:text-cream"
         >
-          Let&apos;s talk &rarr;
+          CONNECT
         </Link>
 
         {/* Mobile hamburger */}
         <button
           onClick={() => setMenuOpen(!menuOpen)}
-          className="md:hidden flex flex-col justify-center items-center w-11 h-11 -mr-1.5 gap-1.5"
+          className="md:hidden justify-self-end flex flex-col justify-center items-center w-11 h-11 -mr-1.5 gap-1.5"
           aria-label={menuOpen ? "Close menu" : "Open menu"}
         >
           <span
@@ -109,7 +109,7 @@ export default function Navbar() {
                   key={link.label}
                   href={link.href}
                   onClick={() => setMenuOpen(false)}
-                  className="font-body text-[15px] text-dark/80 transition-colors duration-200 hover:text-dark py-2"
+                  className="font-body text-[16px] font-medium text-dark/80 tracking-[0.04em] transition-colors duration-200 hover:text-dark py-2"
                 >
                   {link.label}
                 </Link>
@@ -117,9 +117,9 @@ export default function Navbar() {
               <Link
                 href="/#contact"
                 onClick={() => setMenuOpen(false)}
-                className="font-body text-[15px] font-medium text-terracotta transition-colors duration-200 hover:text-terracotta-dark py-2"
+                className="font-body text-[16px] font-medium text-dark tracking-[0.04em] bg-warm px-4.5 py-2 rounded-lg transition-colors duration-200 hover:bg-terracotta-dark hover:text-cream mt-2"
               >
-                Let&apos;s talk &rarr;
+                CONNECT
               </Link>
             </div>
           </motion.div>

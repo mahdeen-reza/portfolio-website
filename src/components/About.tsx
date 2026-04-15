@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "motion/react";
-import { fadeUp, slideFromLeft, staggerContainer } from "@/lib/animations";
+import { fadeUp, fadeUpSubtle, slideFromLeft, staggerContainer } from "@/lib/animations";
 
 export default function About() {
   return (
@@ -40,7 +40,7 @@ export default function About() {
           <div className="flex flex-col md:flex-row gap-8 md:gap-12 items-start">
             {/* Mini photo placeholder */}
             <motion.div
-              variants={fadeUp}
+              variants={fadeUpSubtle}
               className="w-24 h-24 rounded-full bg-dark/5 border border-border flex items-center justify-center shrink-0"
             >
               <span className="font-display font-bold text-2xl tracking-[-0.03em] text-dark/10">
@@ -48,7 +48,7 @@ export default function About() {
               </span>
             </motion.div>
 
-            <motion.div variants={fadeUp} className="flex flex-col gap-4">
+            <motion.div variants={fadeUpSubtle} className="flex flex-col gap-4">
               <p className="font-body text-[15px] leading-[1.7] text-dark/75">
                 I&apos;m Mahdeen Reza — a Systems Governance Analyst with a background
                 in economics from McGill University. I started in SalesOps, where I

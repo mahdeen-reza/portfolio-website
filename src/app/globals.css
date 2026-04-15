@@ -28,6 +28,26 @@
   }
 }
 
+/* ── Floating Tags Animation ── */
+@keyframes float-wave {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+}
+
+/* ── Blinking Cursor ── */
+@keyframes blink-cursor {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
 /* ── Global Styles ── */
 html {
   scroll-behavior: smooth;

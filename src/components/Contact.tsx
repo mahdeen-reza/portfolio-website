@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { motion } from "motion/react";
-import { fadeUp, staggerContainer } from "@/lib/animations";
+import { fadeUp, fadeUpSubtle, staggerContainer } from "@/lib/animations";
 
 export default function Contact() {
   return (
@@ -17,7 +17,7 @@ export default function Contact() {
         >
           {/* Section label */}
           <motion.span
-            variants={fadeUp}
+            variants={fadeUpSubtle}
             className="block font-body font-medium text-[11px] uppercase tracking-[0.1em] text-terracotta mb-4"
           >
             Get in touch
@@ -33,7 +33,7 @@ export default function Contact() {
 
           {/* Copy */}
           <motion.p
-            variants={fadeUp}
+            variants={fadeUpSubtle}
             className="font-body text-[15px] leading-[1.7] text-muted mb-8"
           >
             Open to conversations about AI, SaaS management, and the future of
@@ -42,7 +42,7 @@ export default function Contact() {
 
           {/* Links */}
           <motion.div
-            variants={fadeUp}
+            variants={fadeUpSubtle}
             className="flex flex-wrap items-center gap-3 sm:gap-4"
           >
             <Link

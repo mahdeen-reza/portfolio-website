@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "motion/react";
-import { fadeUp, staggerContainer } from "@/lib/animations";
+import { fadeUp, fadeUpSubtle, staggerContainer } from "@/lib/animations";
 
 const SKILL_CATEGORIES = [
   {
@@ -24,7 +24,7 @@ export default function Skills() {
       <div className="max-w-[1200px] mx-auto px-6 md:px-12 lg:px-16">
         {/* Section label */}
         <motion.span
-          variants={fadeUp}
+          variants={fadeUpSubtle}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}

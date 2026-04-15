@@ -3,12 +3,14 @@
 
 export const EASE_OUT_EXPO = [0.19, 1, 0.22, 1] as const;
 
+export const EASE_SMOOTH = [0.33, 1, 0.68, 1] as const;
+
 export const fadeUp = {
   hidden: { opacity: 0, y: 30 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.6, ease: EASE_OUT_EXPO },
+    transition: { duration: 1.8, ease: EASE_SMOOTH },
   },
 };
 
@@ -17,7 +19,16 @@ export const fadeUpLarge = {
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.6, ease: EASE_OUT_EXPO },
+    transition: { duration: 2.0, ease: EASE_SMOOTH },
+  },
+};
+
+export const fadeUpSubtle = {
+  hidden: { opacity: 0, y: 12 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 1.8, ease: EASE_SMOOTH },
   },
 };
 
@@ -25,7 +36,7 @@ export const fadeIn = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: { duration: 0.6, ease: EASE_OUT_EXPO },
+    transition: { duration: 1.8, ease: EASE_SMOOTH },
   },
 };
 
@@ -34,7 +45,7 @@ export const slideFromLeft = {
   visible: {
     opacity: 1,
     x: 0,
-    transition: { duration: 0.6, ease: EASE_OUT_EXPO },
+    transition: { duration: 1.8, ease: EASE_SMOOTH },
   },
 };
 
@@ -42,7 +53,7 @@ export const staggerContainer = {
   hidden: {},
   visible: {
     transition: {
-      staggerChildren: 0.12,
+      staggerChildren: 0.3,
     },
   },
 };
@@ -51,7 +62,7 @@ export const staggerContainerWide = {
   hidden: {},
   visible: {
     transition: {
-      staggerChildren: 0.15,
+      staggerChildren: 0.35,
     },
   },
 };

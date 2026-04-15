@@ -1,93 +1,145 @@
 "use client";
 
+import React from "react";
 import Link from "next/link";
-import { motion, useScroll, useTransform } from "motion/react";
-import { useRef } from "react";
-import { EASE_OUT_EXPO, fadeUp, staggerContainer } from "@/lib/animations";
+import { motion } from "motion/react";
+import { EASE_OUT_EXPO } from "@/lib/animations";
 import { usePreloaderDone } from "@/lib/usePreloaderDone";
 
-const headingLines = ["Building the", "systems behind", "the systems."];
+const headingLines: React.ReactNode[] = [
+  "Building toward AI-powered",
+  <><span className="text-cream box-decoration-clone bg-[linear-gradient(to_bottom,transparent_5%,var(--color-terracotta)_5%,var(--color-terracotta)_95%,transparent_95%)]">SaaS governance</span></>,
+];
+
+const EXPERTISE_TAGS = [
+  { text: "AI & Automation", delay: 0 },
+  { text: "SaaS Management", delay: 1.5 },
+  { text: "Compliance & Controls", delay: 3.0 },
+  { text: "Data", delay: 4.5 },
+];
 
 export default function Hero() {
-  const sectionRef = useRef<HTMLElement>(null);
   const preloaderDone = usePreloaderDone();
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start start", "end start"],
-  });
-  const photoY = useTransform(scrollYProgress, [0, 1], [0, 80]);
 
   return (
     <section
-      ref={sectionRef}
       className="relative min-h-[calc(100vh-64px)] bg-cream overflow-hidden"
     >
-      <div className="max-w-[1200px] mx-auto px-6 md:px-12 lg:px-16 py-16 md:py-24 lg:py-32 flex flex-col lg:grid lg:grid-cols-[1fr_0.7fr] gap-12 lg:gap-16 items-center">
-        {/* Left column — text */}
-        <motion.div
-          variants={staggerContainer}
-          initial="hidden"
-          animate={preloaderDone ? "visible" : "hidden"}
-          className="flex flex-col gap-6 text-center lg:text-left"
-        >
-          {/* Heading — staggered lines */}
+      <div className="max-w-[1600px] mx-auto px-6 md:px-12 lg:px-20 pt-16 md:pt-24 lg:pt-12 pb-20 md:pb-28 lg:pb-20 flex flex-col min-h-[calc(100vh-64px)]">
+        {/* Top — Heading: centered, full width */}
+        <div className="text-left mt-[4vh]">
           <h1>
             {headingLines.map((line, i) => (
               <motion.span
                 key={i}
-                variants={fadeUp}
-                className="block font-display font-bold text-[clamp(48px,8vw,100px)] tracking-[-0.04em] leading-[0.98] text-dark"
+                initial={{ opacity: 0, y: 12 }}
+                animate={
+                  preloaderDone
+                    ? { opacity: 1, y: 0 }
+                    : { opacity: 0, y: 12 }
+                }
+                transition={{
+                  duration: 1.0,
+                  ease: EASE_OUT_EXPO,
+                  delay: i * 0.15,
+                }}
+                className="block font-display font-[625] text-[clamp(48px,7.2vw,104px)] tracking-[-0.03em] leading-[1.0] text-dark"
               >
                 {line}
+                {i === headingLines.length - 1 && (
+                  <span
+                    className="inline-block bg-dark ml-[0.06em] w-[3px] h-[0.85em] translate-y-[0.05em]"
+                    style={{ animation: "blink-cursor 1s step-end infinite" }}
+                  />
+                )}
               </motion.span>
             ))}
           </h1>
+        </div>
 
-          {/* Subtitle */}
-          <motion.p
-            variants={fadeUp}
-            className="font-body text-[15px] leading-[1.7] text-muted max-w-md mx-auto lg:mx-0"
-          >
-            Systems Governance Analyst specializing in AI, SaaS management,
-            automation, and compliance. Turning complexity into clarity.
-          </motion.p>
-
-          {/* Buttons */}
-          <motion.div
-            variants={fadeUp}
-            className="flex flex-wrap gap-3 justify-center lg:justify-start"
-          >
-            <Link
-              href="/projects"
-              className="bg-terracotta text-cream font-body font-medium text-[13px] px-6 py-3 rounded-lg transition-all duration-200 hover:bg-terracotta-dark hover:scale-[1.02]"
+        {/* Middle — Floating expertise tags: centered row, fills available space */}
+        <div className="hidden lg:flex items-center justify-center gap-16 mt-auto mb-6">
+          {EXPERTISE_TAGS.map((tag, i) => (
+            <motion.div
+              key={tag.text}
+              initial={{ opacity: 0, y: 10 }}
+              animate={
+                preloaderDone
+                  ? { opacity: 1, y: 0 }
+                  : { opacity: 0, y: 10 }
+              }
+              transition={{
+                duration: 1.0,
+                ease: EASE_OUT_EXPO,
+                delay: 0.6 + i * 0.12,
+              }}
             >
-              View projects
-            </Link>
-            <Link
-              href="https://linkedin.com/in/mahdeen-reza"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="border border-charcoal text-charcoal font-body font-medium text-[13px] px-6 py-3 rounded-lg transition-all duration-250 hover:bg-charcoal hover:text-cream"
-            >
-              LinkedIn &rarr;
-            </Link>
-          </motion.div>
-        </motion.div>
+              <span
+                className="font-body text-[20px] text-muted/60 tracking-wide"
+                style={{
+                  display: "inline-block",
+                  animation: `float-wave 6s ease-in-out ${tag.delay}s infinite`,
+                }}
+              >
+                {tag.text}
+              </span>
+            </motion.div>
+          ))}
+        </div>
 
-        {/* Right column — photo placeholder with parallax */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.97 }}
-          animate={preloaderDone ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.97 }}
-          transition={{ duration: 0.8, ease: EASE_OUT_EXPO, delay: 0.4 }}
-          style={{ y: photoY }}
-          className="w-full max-w-[400px] lg:max-w-none"
-        >
-          <div className="aspect-[3/4] rounded-2xl bg-dark/5 border border-border flex items-center justify-center">
-            <span className="font-display font-bold text-[clamp(48px,6vw,80px)] tracking-[-0.04em] text-dark/10">
-              MR
-            </span>
-          </div>
-        </motion.div>
+        {/* Mobile spacer (tags hidden on mobile) */}
+        <div className="flex-1 lg:hidden" />
+
+        {/* Bottom — Subtitle + Buttons */}
+        <div className="flex flex-col gap-6 text-center lg:text-left mt-auto lg:flex-row lg:items-end lg:justify-between">
+            <motion.p
+              initial={{ opacity: 0, y: 6 }}
+              animate={
+                preloaderDone
+                  ? { opacity: 1, y: 0 }
+                  : { opacity: 0, y: 6 }
+              }
+              transition={{
+                duration: 0.9,
+                ease: EASE_OUT_EXPO,
+                delay: 0.5,
+              }}
+              className="font-body text-[23px] leading-[1.7] text-muted max-w-md lg:max-w-[50%] mx-auto lg:mx-0"
+            >
+              <span className="text-charcoal font-semibold">Systems Governance Analyst at Lightspeed Commerce — building the function from scratch.</span>{" "}
+              Scope spans SaaS management, data and compliance infrastructure, workflow automation, and shipping AI-powered internal tooling. Exploring what becomes possible when you put AI inside the systems layer.{" "}
+              <span className="text-terracotta-dark font-semibold">Documenting the work in real time.</span>
+            </motion.p>
+
+            <motion.div
+              initial={{ opacity: 0, y: 6 }}
+              animate={
+                preloaderDone
+                  ? { opacity: 1, y: 0 }
+                  : { opacity: 0, y: 6 }
+              }
+              transition={{
+                duration: 0.9,
+                ease: EASE_OUT_EXPO,
+                delay: 0.65,
+              }}
+              className="flex flex-wrap gap-3 justify-center lg:justify-end lg:shrink-0"
+            >
+              <Link
+                href="/projects"
+                className="bg-warm text-dark font-body text-[19px] font-medium tracking-[0.04em] px-5.5 py-2.5 rounded-lg transition-colors duration-200 hover:bg-terracotta-dark hover:text-cream"
+              >
+                View projects
+              </Link>
+              <a
+                href="/resume.pdf"
+                download
+                className="bg-terracotta text-cream font-body text-[19px] font-medium tracking-[0.04em] px-5.5 py-2.5 rounded-lg transition-colors duration-200 hover:bg-terracotta-dark hover:text-cream"
+              >
+                Download Resume
+              </a>
+            </motion.div>
+        </div>
       </div>
     </section>
   );

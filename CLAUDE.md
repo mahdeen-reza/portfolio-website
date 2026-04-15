@@ -1,67 +1,75 @@
 @AGENTS.md
 
-# Portfolio Website — Mahdeen Reza
+# Portfolio — Mahdeen Reza
 
 ## Commands
-- `npm run dev` — local dev server (Turbopack)
-- `npm run build` — production build
-- `npm run lint` — ESLint
+`npm run dev` | `npm run build` | `npm run lint`
 
-## Tech Stack
-Next.js 16 (App Router) · Tailwind v4 (CSS-first @theme) · motion v12+ (import from "motion/react") · TypeScript · React 19
+## Stack
+Next.js 16 (App Router) · Tailwind v4 (CSS-first @theme) · motion v12+ (`"motion/react"`) · TypeScript · React 19
 
-## Design Tokens (src/app/globals.css @theme)
+## Tokens (globals.css @theme)
 Colors: cream #FAF9F6 | dark #1A1A1A | warm #F0EDE6 | terracotta #B5654A | terracotta-hover #D4A08A | terracotta-dark #8B4332 | charcoal #3D3D3A | muted #6B6B6B | border #E0DED8
-Fonts: Clash Display (--font-clash → font-display, headings, 500/600/700) | Switzer (--font-switzer → font-body, body/UI, 400/500)
-Font loading: next/font/local in src/lib/fonts.ts → CSS vars on `<html>` → consumed via @theme inline in globals.css
+Fonts: Clash Display → font-display (headings) | Switzer → font-body (body/UI). Self-hosted woff2 via next/font/local (src/lib/fonts.ts).
 Radius: cards 12px | buttons 8px | tags 6px
 
-## Typography Quick Ref
-Hero heading:     font-display font-bold text-[clamp(48px,8vw,100px)] tracking-[-0.04em] leading-[0.98]
-Section heading:  font-display font-semibold text-[clamp(28px,4vw,48px)] tracking-[-0.03em] leading-[1.05]
-Card heading:     font-display font-semibold text-lg tracking-[-0.02em]
-Nav logo:         font-display font-semibold text-base tracking-[-0.02em]
-Body:             font-body text-[15px] leading-[1.7]
-Small body:       font-body text-sm leading-[1.6]
-Section label:    font-body font-medium text-[11px] uppercase tracking-[0.1em]
-Nav links:        font-body text-[13px]
-Button text:      font-body font-medium text-[13px]
-Footer text:      font-body text-xs
+## Typography
+Hero: font-display font-bold text-[clamp(48px,8vw,100px)] tracking-[-0.04em] leading-[0.98]
+Section h2: font-display font-semibold text-[clamp(28px,4vw,48px)] tracking-[-0.03em] leading-[1.05]
+Body: font-body text-[15px] leading-[1.7] | Small: text-sm leading-[1.6] | Label: text-[11px] uppercase tracking-[0.1em]
+Nav/Button: font-body text-[13px] | Footer: text-xs
 
 ## Architecture
-- Pages: src/app/page.tsx (home) | src/app/projects/page.tsx (all projects) | src/app/projects/[slug]/page.tsx (case studies)
-- Homepage flow: Hero → Marquee → Projects (preview, featured only) → Skills → About (bio-only) → Contact
-- Components: src/components/ — one file per component, "use client" only where needed
-- Data: src/lib/projects.ts — project metadata array with `featured?: boolean` flag for homepage preview
-- Fonts: src/lib/fonts.ts — next/font/local config
-- Animations: src/lib/animations.ts — shared motion variants (fadeUp, fadeIn, stagger, slideIn)
-- ScrollReveal: src/components/ScrollReveal.tsx — reusable whileInView wrapper for all scroll-triggered entrances
+Pages: / (home) | /projects (listing) | /projects/[slug] (case study)
+Home flow: Hero → Marquee → Projects(preview) → Skills → About → Contact
+Components: src/components/ — "use client" only for motion/hooks
+Data: src/lib/projects.ts — `featured?: boolean` for homepage preview
+Animations: src/lib/animations.ts — shared variants + easing constants
 
-## Component Conventions
-- Server Components by default. Add "use client" only for interactivity/motion/hooks.
-- All homepage sections use id="" for nav anchor scrolling (id="projects", id="about", id="contact")
-- Tailwind utility classes only — no inline styles, no CSS modules, no styled-components
-- next/image for all images (with width/height or fill)
-- motion from "motion/react" for animations — NOT "framer-motion"
-- Consistent max-width container: max-w-[1200px] mx-auto px-6 md:px-12 lg:px-16
+## Conventions
+- Server Components default; "use client" only when needed
+- Container: max-w-[1200px] mx-auto px-6 md:px-12 lg:px-16
+- Sections: py-24 md:py-32, id="" for anchor scroll
+- motion from "motion/react" — NOT "framer-motion"
+- next/image for all images
+- Tailwind only — no inline styles, no CSS modules
 
-## Animation Conventions
-- Scroll reveals: `<ScrollReveal>` wrapper with whileInView, viewport={{ once: true }}
-- Standard easing: [0.19, 1, 0.22, 1] (expo out) — used for all motion animations
-- Standard duration: 0.6s entrance, 0.3s exit
-- Stagger: 0.12-0.15s between siblings
-- Marquee: pure CSS @keyframes translateX(-50%) — NO JS, NO motion
-- Hover states: Tailwind transition-* + duration-* classes
+## Animation System
+Easing: EASE_OUT_EXPO [0.19,1,0.22,1] (preloader) | EASE_SMOOTH [0.33,1,0.68,1] (page elements)
+Variants: fadeUp (y:30, 1.8s) | fadeUpSubtle (y:12, 1.8s, for body text) | fadeUpLarge (y:40, 2.0s) | fadeIn (1.8s) | slideFromLeft (x:-20, 1.8s)
+Stagger: 0.3s (standard) | 0.35s (wide)
+Preloader: fade-in 1.5s → exit slide-up 2.5s ease-in [0.5,0,0.9,0.2] — shows every refresh
+Hero: explicit per-element delays (heading 0/0.2/0.4s, subtitle 0.8s, buttons 1.0s, photo 1.0s)
+Scroll: whileInView + viewport={{ once: true }}
+Marquee: pure CSS @keyframes — NO JS
+Hover: Tailwind transition-* + duration-*
 
-## Key Data
-Four projects (in order): License Clean-Up Agent | SaaS License Monitor | SOX Access Review Controls | SaaS Renewal Operations
-Slugs: license-cleanup-agent | saas-license-monitor | sox-access-review-controls | saas-renewal-operations
+## Data
+Projects: license-cleanup-agent | saas-license-monitor | sox-access-review-controls | saas-renewal-operations
+
+## Design Collaboration
+- Act as a professional web designer collaborating with the user
+- NEVER build on assumptions — ask clarifying questions until the design intent is fully understood
+- When the user describes a layout or visual, confirm understanding with specific technical terms before implementing
+- If a reference site is provided, identify the exact CSS/layout technique being used and confirm with the user
+- Iterate in a question→confirm→implement loop, not a guess→build→fix loop
 
 ## Constraints
-- NO component libraries (no shadcn, no MUI, no Radix, no Headless UI)
-- NO CSS frameworks beyond Tailwind (no Bootstrap, no Chakra)
-- NO CDN fonts — self-hosted woff2 in public/fonts/
-- NO Google Fonts, NO Fontshare CDN links
-- NO dark mode — single light theme (cream primary bg)
-- All copy is placeholder — structure/design/animation first
-- Hero photo: use gray placeholder div with "MR" initials until real PNG provided
+NO component libs (shadcn/MUI/Radix) · NO CSS beyond Tailwind · NO CDN/Google fonts · NO dark mode · Placeholder copy — design first
+
+## Plugins
+Installed via Claude Code plugin marketplace (claude-plugins-official):
+
+**frontend-design** — Generates distinctive, production-grade UI. Auto-invoked for frontend work. Avoids generic AI aesthetics; favors bold typography, color, and animation choices.
+
+**superpowers** (v5.0.7) — Core skills library. Key skills:
+- `/brainstorming` `/writing-plans` `/executing-plans` — structured planning workflow
+- `/test-driven-development` `/systematic-debugging` — TDD and debugging patterns
+- `/subagent-driven-development` `/dispatching-parallel-agents` — multi-agent coordination
+- `/verification-before-completion` — quality checks before marking work done
+- `/finishing-a-development-branch` `/using-git-worktrees` — git workflow patterns
+- `/requesting-code-review` `/receiving-code-review` — code review patterns
+
+**context7** (MCP) — Pulls up-to-date, version-specific library documentation into context. Use when referencing Next.js, Tailwind, motion, or any npm package docs.
+
+**github** (MCP) — GitHub API access: issues, PRs, code review, repo search. Requires `GITHUB_PERSONAL_ACCESS_TOKEN` env var (currently not connected).

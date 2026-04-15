@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { motion } from "motion/react";
-import { fadeUp, staggerContainerWide } from "@/lib/animations";
+import { fadeUp, fadeUpSubtle, staggerContainerWide } from "@/lib/animations";
 import { projects } from "@/lib/projects";
 import ProjectCard from "@/components/ProjectCard";
 
@@ -34,7 +34,7 @@ export default function Projects({
 
         {/* Section label */}
         <motion.span
-          variants={fadeUp}
+          variants={fadeUpSubtle}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
@@ -70,7 +70,7 @@ export default function Projects({
         {/* View all link (homepage preview only) */}
         {preview && (
           <motion.div
-            variants={fadeUp}
+            variants={fadeUpSubtle}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
