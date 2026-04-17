@@ -12,6 +12,8 @@ export interface Project {
   github?: string;
   demo?: string;
   featured?: boolean;
+  impact?: string;
+  cardTags?: string[];
   role: string;
   status: string;
   sections: CaseStudySection[];
@@ -27,6 +29,8 @@ export const projects: Project[] = [
     tags: ["AI", "TypeScript", "React", "Full-stack"],
     github: "https://github.com/mahdeen-reza/license-cleanup-agent-demo",
     featured: true,
+    impact: "Identified six-figure savings in unused licenses",
+    cardTags: ["Vibe-Coded", "Claude Code", "TypeScript", "React"],
     role: "Creator & Lead Developer",
     status: "Shipped",
     sections: [
@@ -58,6 +62,8 @@ export const projects: Project[] = [
     github: "https://github.com/mahdeen-reza/saas-license-monitor",
     demo: "https://mahdeen-reza.github.io/saas-license-monitor",
     featured: true,
+    impact: "Replaced manual monthly tracking with automated daily monitoring",
+    cardTags: ["BigQuery", "Looker", "SQL", "Fivetran"],
     role: "Architect & Builder",
     status: "Live",
     sections: [

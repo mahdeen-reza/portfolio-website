@@ -1,74 +1,182 @@
 "use client";
 
-import { motion } from "motion/react";
-import { fadeUp, fadeUpSubtle, slideFromLeft, staggerContainer } from "@/lib/animations";
+import { useRef } from "react";
+import Image from "next/image";
+import {
+  motion,
+  useScroll,
+  useTransform,
+  useReducedMotion,
+} from "motion/react";
+import {
+  fadeUpFast,
+  fadeUpSubtleFast,
+  staggerContainerFast,
+} from "@/lib/animations";
+
+/* ── Info container data ── */
+const HOBBIES = [
+  { emoji: "\u{1F3CF}", label: "Cricket" },
+  { emoji: "\u26BD", label: "Football" },
+  { emoji: "\u{1F3BE}", label: "Padel" },
+  { emoji: "\u{1F916}", label: "AI" },
+  { emoji: "\u{1F3DB}\uFE0F", label: "Economics and Politics" },
+  { emoji: "\u{1F4C8}", label: "Financial Markets" },
+  { emoji: "\u{1F454}", label: "Fashion" },
+  { emoji: "\u{1F37D}\uFE0F", label: "Food" },
+];
+
+const CAREER_PATHS = [
+  { emoji: "\u{1F3AF}", label: "Product" },
+  { emoji: "\u{1F504}", label: "RevOps" },
+  { emoji: "\u{1F3D7}\uFE0F", label: "Solutions Architect" },
+];
 
 export default function About() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const prefersReducedMotion = useReducedMotion();
+
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start 0.9", "start 0.2"],
+  });
+
+  const scale = useTransform(scrollYProgress, [0, 1], [0.85, 1]);
+  const borderRadius = useTransform(scrollYProgress, [0, 1], [32, 0]);
+
   return (
-    <section id="about" className="bg-warm py-24 md:py-32 scroll-mt-16">
-      <div className="max-w-[1200px] mx-auto px-6 md:px-12 lg:px-16">
-        {/* Section label */}
-        <motion.span
-          variants={slideFromLeft}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          className="block font-body font-medium text-[11px] uppercase tracking-[0.1em] text-terracotta mb-4"
-        >
-          About
-        </motion.span>
+    <section
+      ref={sectionRef}
+      id="about"
+      className="bg-cream overflow-hidden scroll-mt-16 py-8 md:py-12"
+    >
+      <motion.div
+        style={
+          prefersReducedMotion
+            ? {}
+            : { scale, borderRadius }
+        }
+        className="bg-white min-h-[calc(85vh-54px)] flex flex-col pt-12 pb-20 md:pt-16 md:pb-28 origin-center"
+      >
+        <div className="max-w-[1600px] mx-auto px-6 md:px-12 lg:px-20 w-full">
+          {/* Section heading */}
+          <motion.h2
+            variants={fadeUpFast}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-80px" }}
+            className="font-display font-bold text-[clamp(38px,5.5vw,72px)] uppercase tracking-[-0.03em] text-terracotta mb-8 will-change-transform"
+          >
+            About
+          </motion.h2>
 
-        {/* Heading */}
-        <motion.h2
-          variants={fadeUp}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          className="font-display font-semibold text-[clamp(28px,4vw,48px)] tracking-[-0.03em] leading-[1.05] text-dark mb-12"
-        >
-          The person behind the systems.
-        </motion.h2>
-
-        <motion.div
-          variants={staggerContainer}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          className="max-w-2xl"
-        >
-          {/* Photo + bio */}
-          <div className="flex flex-col md:flex-row gap-8 md:gap-12 items-start">
-            {/* Mini photo placeholder */}
+          {/* Two-column layout: 30/70 (portrait left, text right) */}
+          <motion.div
+            variants={staggerContainerFast}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-80px" }}
+            className="grid grid-cols-1 lg:grid-cols-[3fr_7fr] gap-10 lg:gap-12 items-stretch"
+          >
+            {/* ── Left column: photo + resume button ── */}
             <motion.div
-              variants={fadeUpSubtle}
-              className="w-24 h-24 rounded-full bg-dark/5 border border-border flex items-center justify-center shrink-0"
+              variants={fadeUpSubtleFast}
+              className="flex flex-col will-change-transform"
             >
-              <span className="font-display font-bold text-2xl tracking-[-0.03em] text-dark/10">
-                MR
-              </span>
+              <Image
+                src="/Lightspeed_Portraits_Feb20_2025_Mahdeen Reza Amin.jpg"
+                alt="Mahdeen Reza"
+                width={600}
+                height={800}
+                className="w-full h-auto object-cover"
+                sizes="(max-width: 1024px) 100vw, 30vw"
+              />
+              <div className="flex-1" />
+              <a
+                href="/resume.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 w-full bg-terracotta text-cream font-body text-[16px] font-medium tracking-[0.04em] px-6 py-3 rounded-lg transition-colors duration-200 hover:bg-terracotta-dark mt-4"
+              >
+                Download Resume
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3" />
+                </svg>
+              </a>
             </motion.div>
 
-            <motion.div variants={fadeUpSubtle} className="flex flex-col gap-4">
-              <p className="font-body text-[15px] leading-[1.7] text-dark/75">
-                I&apos;m Mahdeen Reza — a Systems Governance Analyst with a background
-                in economics from McGill University. I started in SalesOps, where I
-                discovered that the most impactful work happens at the intersection of
-                systems, data, and process.
-              </p>
-              <p className="font-body text-[15px] leading-[1.7] text-dark/75">
-                Today I build the infrastructure that keeps organizations running
-                cleanly — from AI-powered license analysis tools to SOX-compliant
-                audit frameworks. I manage a 60+ system portfolio and focus on turning
-                manual, error-prone processes into automated, auditable workflows.
-              </p>
-              <p className="font-body text-[15px] leading-[1.7] text-dark/75">
-                When I&apos;m not deep in governance work, I&apos;m prototyping internal tools
-                with TypeScript and React, or exploring how AI can reshape operations.
-              </p>
+            {/* ── Right column: text + containers ── */}
+            <motion.div variants={fadeUpFast} className="flex flex-col will-change-transform">
+              {/* Body text */}
+              <div className="mb-8 space-y-4">
+                <p className="font-body text-[23px] leading-[1.7] text-charcoal">
+                  I&apos;m Mahdeen Reza &mdash; a Systems Governance Analyst at
+                  Lightspeed Commerce, building the governance function from
+                  scratch. Economics background from McGill, started in SalesOps.
+                </p>
+                <p className="font-body text-[23px] leading-[1.7] text-charcoal">
+                  Today I build the infrastructure that keeps organizations
+                  running &mdash; from AI-powered license analysis to SOX-compliant
+                  audit frameworks. Managing a 60+ system portfolio, turning
+                  manual processes into automated workflows.
+                </p>
+              </div>
+
+              {/* Separator */}
+              <div className="border-t border-dark/10 mb-8" />
+
+              {/* Info containers — grid, full width, equal height */}
+              <div className="grid grid-cols-1 sm:grid-cols-[3fr_1fr] gap-4">
+                {/* Hobbies — 3-column list */}
+                <div className="bg-dark/[0.03] border border-dark/10 rounded-xl pl-12 pr-6 py-6">
+                  <h3 className="font-display font-bold text-[15px] uppercase tracking-[0.06em] text-dark mb-5">
+                    Hobbies &amp; Interests
+                  </h3>
+                  <ul className="grid grid-cols-3 gap-x-10 gap-y-2.5">
+                    {HOBBIES.map((item) => (
+                      <li
+                        key={item.label}
+                        className="flex items-center gap-2.5 font-body text-[13px] leading-[1.6] text-muted"
+                      >
+                        <span className="text-[15px] shrink-0">{item.emoji}</span>
+                        {item.label}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                {/* Career Path — equal height via grid stretch */}
+                <div className="bg-dark/[0.03] border border-dark/10 rounded-xl px-7 py-6">
+                  <h3 className="font-display font-bold text-[15px] uppercase tracking-[0.06em] text-dark mb-5">
+                    Career Path Interests
+                  </h3>
+                  <ul className="flex flex-col gap-2.5">
+                    {CAREER_PATHS.map((item) => (
+                      <li
+                        key={item.label}
+                        className="flex items-center gap-2.5 font-body text-[13px] leading-[1.6] text-muted"
+                      >
+                        <span className="text-[15px] shrink-0">{item.emoji}</span>
+                        {item.label}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
             </motion.div>
-          </div>
-        </motion.div>
-      </div>
+          </motion.div>
+        </div>
+      </motion.div>
     </section>
   );
 }

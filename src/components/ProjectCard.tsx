@@ -2,46 +2,53 @@
 
 import Link from "next/link";
 import { motion } from "motion/react";
-import { fadeUpLarge } from "@/lib/animations";
+import { fadeUp } from "@/lib/animations";
 import type { Project } from "@/lib/projects";
 
 export default function ProjectCard({ project }: { project: Project }) {
+  const tags = project.cardTags ?? project.tags;
+
   return (
-    <motion.div variants={fadeUpLarge}>
+    <motion.div variants={fadeUp} className="group">
       <Link
         href={`/projects/${project.slug}`}
-        className="group block border border-white/10 bg-white/[0.03] rounded-xl p-6 md:p-8 transition-all duration-250 hover:bg-white/[0.06] hover:border-white/20 hover:-translate-y-0.5"
+        className="block transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-terracotta/10"
       >
-        <div className="flex items-start gap-6 md:gap-8">
-          {/* Number */}
-          <span className="hidden sm:block font-display font-semibold text-[48px] leading-none tracking-[-0.03em] text-white/[0.08] shrink-0 select-none">
-            {project.number}
+        {/* Folder tab */}
+        <div className="inline-block bg-dark/[0.06] border border-dark/15 border-b-0 rounded-t-lg px-5 py-1.5 transition-all duration-300 group-hover:bg-terracotta/[0.06] group-hover:border-terracotta/30">
+          <span className="font-body text-[11px] font-medium uppercase tracking-[0.06em] text-muted">
+            {project.status}
           </span>
+        </div>
 
-          {/* Content */}
-          <div className="flex-1 min-w-0">
-            <h3 className="font-display font-semibold text-lg tracking-[-0.02em] text-cream mb-1.5">
+        {/* Card body */}
+        <div className="border border-dark/15 bg-dark/[0.06] rounded-xl rounded-tl-none p-5 md:p-6 transition-all duration-300 group-hover:bg-terracotta/[0.04] group-hover:border-terracotta/30">
+          <div className="flex flex-col gap-3">
+            <h3 className="font-display font-semibold text-[clamp(24px,3vw,34px)] tracking-[-0.02em] text-dark">
               {project.name}
             </h3>
-            <p className="font-body text-sm leading-[1.6] text-cream/55 mb-4">
+            <p className="font-body text-[20px] leading-[1.6] text-muted">
               {project.description}
             </p>
-            <div className="flex flex-wrap gap-2">
-              {project.tags.map((tag) => (
+            {project.impact && (
+              <p className="font-body text-[14px] leading-[1.5] text-muted">
+                {project.impact}
+              </p>
+            )}
+            <div className="flex flex-wrap gap-2 mt-1">
+              {tags.map((tag) => (
                 <span
                   key={tag}
-                  className="font-body text-[11px] font-medium text-terracotta bg-terracotta/10 px-2.5 py-1 rounded-md"
+                  className="font-body text-[13px] font-medium text-terracotta bg-terracotta/15 border border-terracotta/30 px-3 py-1.5 rounded-md transition-colors duration-200 hover:bg-terracotta/25"
                 >
                   {tag}
                 </span>
               ))}
             </div>
+            <span className="self-end font-body text-[16px] font-medium text-terracotta tracking-[0.02em] mt-2 transition-all duration-300 group-hover:text-terracotta-dark group-hover:scale-105 group-hover:translate-x-1 origin-right">
+              Read case study <span aria-hidden="true">&rarr;</span>
+            </span>
           </div>
-
-          {/* Arrow */}
-          <span className="shrink-0 text-cream/40 text-lg transition-all duration-250 group-hover:text-cream/70 group-hover:translate-x-1 mt-1">
-            &rarr;
-          </span>
         </div>
       </Link>
     </motion.div>

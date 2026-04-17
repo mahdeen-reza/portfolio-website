@@ -123,21 +123,14 @@ export default function Hero() {
                 ease: EASE_OUT_EXPO,
                 delay: 0.65,
               }}
-              className="flex flex-wrap gap-3 justify-center lg:justify-end lg:shrink-0"
+              className="flex justify-center lg:justify-end lg:shrink-0"
             >
               <Link
                 href="/projects"
-                className="bg-warm text-dark font-body text-[19px] font-medium tracking-[0.04em] px-5.5 py-2.5 rounded-lg transition-colors duration-200 hover:bg-terracotta-dark hover:text-cream"
+                className="bg-terracotta text-cream font-body text-[19px] font-medium tracking-[0.04em] px-5.5 py-2.5 rounded-lg transition-colors duration-200 hover:bg-terracotta-dark hover:text-cream"
               >
                 View projects
               </Link>
-              <a
-                href="/resume.pdf"
-                download
-                className="bg-terracotta text-cream font-body text-[19px] font-medium tracking-[0.04em] px-5.5 py-2.5 rounded-lg transition-colors duration-200 hover:bg-terracotta-dark hover:text-cream"
-              >
-                Download Resume
-              </a>
             </motion.div>
         </div>
       </div>
