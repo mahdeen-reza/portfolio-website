@@ -277,26 +277,179 @@ Phase 2 adds a different challenge: tools without a Fivetran connector and possi
     slug: "sox-access-review-controls",
     description:
       "Audit infrastructure for SOX ITGC compliance with cell-level edit tracking.",
-    tags: ["Compliance", "Google Apps Script", "SOX"],
+    tags: ["Google Apps Script", "Google Sheets", "SOX", "Compliance"],
     github: "https://github.com/mahdeen-reza/systems-governance-toolkit",
     role: "Compliance Engineer",
-    status: "Production",
+    status: "Live — deployed across access review cycles",
     sections: [
       {
+        heading: "Background",
+        body: `SOX ITGC access reviews require designated managers to periodically confirm whether their direct reports should retain system access. Reviews run in Google Sheets, are tested externally by auditors, and carry direct audit consequences if controls fail.`,
+      },
+      {
         heading: "The Problem",
-        body: "SOX ITGC access reviews required evidence of who approved what, when, and whether any changes were made after approval. The existing process used shared spreadsheets with no audit trail — a material control weakness flagged by internal audit.",
+        body: `The process had controls in place, but the approach was detection-heavy. Two gaps created audit risk.
+
+**Enforcement was not live.** Nothing prevented a reviewer from editing a row assigned to someone else. The only catch mechanism was manual post-review validation — matching completed rows against HR data using spreadsheet formulas after the fact.
+
+**Attribution was incomplete.** Sheet-level edit history existed but lacked per-cell resolution. Confirming who changed what required manual reconciliation, not automatic attribution.`,
       },
       {
-        heading: "The Approach",
-        body: "Built a Google Apps Script-based framework that adds cell-level edit tracking to access review workbooks. Every change — who made it, what the old value was, what the new value is, and the timestamp — is logged to a protected audit sheet that reviewers cannot modify.",
+        heading: "The Solution — Two Layers",
+        body: `Built directly into Google Sheets using Google Apps Script — keeping the audit evidence in the same environment auditors already review, with no additional tooling to introduce or defend.
+
+**Layer 1 — Row-Level Enforcement**
+Editor identity is captured automatically from their Google Workspace login and checked against the assigned reviewer for that row. Unauthorized edits are reverted immediately and the editor is notified in real time. Authorized edits are timestamped with the reviewer's email and time of sign-off.
+
+**Layer 2 — Cell-Level Audit Trail**
+Runs before Layer 1's revert logic — so unauthorized attempts are captured before they are wiped. Every edit to the primary decision column is logged to a dedicated audit tab: timestamp, editor email, record ID, assigned reviewer email, value entered, match status, and edit type. A validation status (Match / No Match / No Owner Assigned) is written to a visible column in the main sheet.
+
+No Match persists in the validation column even after a revert — the attempt is the compliance signal, not just the outcome.`,
       },
       {
-        heading: "Key Decisions",
-        body: "Chose Google Apps Script to meet teams where they already work (Google Sheets) rather than forcing adoption of a new tool. Designed the audit log as append-only with script-level protections to satisfy auditor requirements for tamper-evident records.",
+        heading: "The Code",
+        body: `The full script is a single Google Apps Script file (\`access_review.gs\`) deployed via an installable trigger on each review sheet. Source: [systems-governance-toolkit on GitHub](https://github.com/mahdeen-reza/systems-governance-toolkit)
+
+The architecture separates configuration from logic. Two configuration blocks at the top of the script define every sheet-specific value — column indices, sheet names, audit log tab name. Deploying to a new review sheet means updating these blocks only. The logic blocks are never modified.
+
+\`\`\`javascript
+// LAYER 1 CONFIGURATION — update these values to match your sheet
+const SHEET_NAME         = "Access Review";  // Exact name of the sheet tab to monitor
+const COLUMNS_TO_WATCH   = [25, 26, 27];     // Columns to enforce (Y=25, Z=26, AA=27)
+const OWNER_EMAIL_COLUMN = 23;               // Column containing the assigned reviewer's email (W=23)
+const LOG_COLUMN_OFFSET  = 4;                // Reviewer timestamp: edited col + offset (e.g. Y+4 → col AC)
+
+// LAYER 2 CONFIGURATION — update these values to match your sheet
+const AUDIT_LOG_SHEET_NAME = "Audit Log";  // Exact name of the audit log tab
+const HISTORY_TRACK_COLUMN = 25;           // Primary decision column to audit (Y=25)
+const MATCH_STATUS_COLUMN  = 30;           // Column for Edit History Validation status (AD=30)
+const AUDIT_RECORD_ID_COL  = 1;            // Column containing the system Record ID (A=1)
+const AUDIT_USER_NAME_COL  = 2;            // Column containing the User Name (B=2)
+\`\`\`
+
+**Layer 1 — Row-Level Enforcement (\`onEdit\`)**
+
+The \`onEdit\` function fires on every edit event. It first passes the event to the audit layer (Layer 2), then checks whether the edit falls within a watched column. If it does, the editor's email is compared against the assigned reviewer email for that row. Unauthorized edits are reverted immediately — single-cell edits restore the previous value via \`e.oldValue\`, while multi-cell edits (drag/paste) revert to blank as a safe fallback. Authorized edits containing "yes" or "no" trigger a reviewer timestamp written to a logging column.
+
+\`\`\`javascript
+function onEdit(e) {
+  onEditAuditHistory(e); // Audit layer runs first — captures value before any revert
+
+  if (!e || !e.range) return;
+
+  const range     = e.range;
+  const sheet     = range.getSheet();
+  const userEmail = e.user ? e.user.getEmail() : null;
+
+  if (sheet.getName() !== SHEET_NAME || !userEmail) return;
+
+  for (let row = range.getRow(); row <= range.getLastRow(); row++) {
+    for (let col = range.getColumn(); col <= range.getLastColumn(); col++) {
+
+      if (COLUMNS_TO_WATCH.includes(col)) {
+        const ownerEmail = sheet.getRange(row, OWNER_EMAIL_COLUMN)
+                               .getValue().trim().toLowerCase();
+
+        if (ownerEmail && userEmail.toLowerCase() !== ownerEmail) {
+          // Revert unauthorized edit
+          const oldValue = (range.getNumRows() === 1 && range.getNumColumns() === 1)
+                           ? e.oldValue : "";
+          sheet.getRange(row, col).setValue(oldValue);
+
+          SpreadsheetApp.getActiveSpreadsheet().toast(
+            \\\`Change reverted. You are not authorized to edit this row.\\\`,
+            "Access Denied", 5
+          );
+        } else {
+          // Log reviewer timestamp on authorized edits containing "yes" or "no"
+          const newValue = sheet.getRange(row, col).getValue().toString().toLowerCase();
+          if (newValue.includes("yes") || newValue.includes("no")) {
+            const timestamp = new Date();
+            const stampText = \\\`\\\${userEmail} reviewed on \\\${timestamp.toLocaleString()}\\\`;
+            sheet.getRange(row, col + LOG_COLUMN_OFFSET).setValue(stampText);
+          }
+        }
+      }
+    }
+  }
+}
+\`\`\`
+
+**Layer 2 — Cell-Level Audit Trail (\`onEditAuditHistory\`)**
+
+Called as the first action inside \`onEdit()\` — before the revert fires — so unauthorized values are captured in the audit log before they are wiped. For every edit to the primary decision column, the function reads the editor email, assigned reviewer email, record metadata, and new value. It derives a match status (\`Match\`, \`No Match\`, or \`No Owner Assigned\`) and appends a full record to the audit log tab. The validation status is also written to a visible column in the main sheet — including for unauthorized attempts, so the mismatch is surfaced even after the cell is reverted.
+
+\`\`\`javascript
+function onEditAuditHistory(e) {
+  if (!e || !e.range) return;
+
+  const range     = e.range;
+  const sheet     = range.getSheet();
+  const userEmail = e.user ? e.user.getEmail().toLowerCase() : null;
+
+  if (sheet.getName() !== SHEET_NAME || !userEmail) return;
+
+  const ss         = SpreadsheetApp.getActiveSpreadsheet();
+  const auditSheet = ss.getSheetByName(AUDIT_LOG_SHEET_NAME);
+  if (!auditSheet) return;
+
+  for (let row = range.getRow(); row <= range.getLastRow(); row++) {
+    for (let col = range.getColumn(); col <= range.getLastColumn(); col++) {
+
+      if (col !== HISTORY_TRACK_COLUMN) continue;
+
+      const recordId      = sheet.getRange(row, AUDIT_RECORD_ID_COL).getValue();
+      const userName      = sheet.getRange(row, AUDIT_USER_NAME_COL).getValue();
+      const reviewerEmail = sheet.getRange(row, OWNER_EMAIL_COLUMN)
+                                 .getValue().trim().toLowerCase();
+      const newValue      = sheet.getRange(row, col).getValue();
+      const timestamp     = new Date();
+
+      let matchStatus, editType;
+
+      if (!reviewerEmail) {
+        matchStatus = "No Owner Assigned";
+        editType    = "Authorized";
+      } else if (userEmail === reviewerEmail) {
+        matchStatus = "Match";
+        editType    = "Authorized";
+      } else {
+        matchStatus = "No Match";
+        editType    = "Unauthorized Attempt";
+      }
+
+      // Append full record to audit log
+      auditSheet.appendRow([
+        timestamp, userEmail, recordId, userName,
+        reviewerEmail, newValue, matchStatus, editType
+      ]);
+
+      // Write validation status to main sheet — all outcomes including unauthorized
+      sheet.getRange(row, MATCH_STATUS_COLUMN).setValue(matchStatus);
+    }
+  }
+}
+\`\`\`
+
+Key design decision: the audit function is called *before* the enforcement function's revert logic. This ordering guarantees that even unauthorized edits — which will be immediately reverted — are captured in the audit log with the actual value the editor attempted to write. The compliance record is complete regardless of whether the enforcement control succeeds or fails.`,
       },
       {
-        heading: "Results",
-        body: "Achieved 100% SOX ITGC pass rate across all access review cycles. Eliminated the control weakness finding from the prior year. The framework has been adopted across multiple control areas beyond the original scope.",
+        heading: "Impact",
+        body: `| Metric | Outcome |
+|---|---|
+| SOX ITGC pass rate | 100% — no discrepancies found since implementation |
+| Manual post-review validation | Eliminated — attribution is live and automatic |
+| Audit evidence | Generated by the process itself, not reconstructed after the fact |
+| Coverage | Deployed across UARs and PARs |
+| Reusability | New review sheets deployed via configuration block update only — no logic changes |`,
+      },
+      {
+        heading: "What's Next",
+        body: `**Centralized audit trail.** The audit log currently lives as a tab within each review sheet. Next access review season, the script will be updated to auto-generate a dedicated Google Sheet per review cycle, stored in a designated Drive folder — centralizing the audit trail across all review sheets into a single, structured location.
+
+**Trigger automation.** Deployment currently requires manually setting up an installable trigger per sheet. Will be exploring options to automate this step.
+
+**Approver view.** The current sheet surfaces all rows to all approvers — reviewers have to locate their assigned rows manually. A cleaner solution would be a view that filters to only the rows assigned to the logged-in reviewer based on their email. This is on the roadmap pending leadership assessment of effort versus ROI — the current implementation is working well and any change needs to justify the investment.`,
       },
     ],
   },
