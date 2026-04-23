@@ -460,24 +460,167 @@ Key design decision: the audit function is called *before* the enforcement funct
     description:
       "End-to-end process architecture across a 60+ system portfolio.",
     tags: ["Process Design", "Operations", "Governance"],
-    role: "Process Architect",
+    role: "Sole Designer and Implementer",
     status: "Ongoing",
     sections: [
       {
         heading: "The Problem",
-        body: "Renewal management across a 60+ system portfolio was reactive — contracts would surface weeks or days before expiry, leaving no time for negotiation, consolidation analysis, or stakeholder alignment. There was no single source of truth for contract terms, ownership, or renewal timelines.",
+        body: `Managing SaaS renewals without a documented process is manageable — until it isn't. Renewals get done, but they get done reactively, inconsistently, and without the analytical foundation that separates a transactional renewal from a strategic one.
+
+The systems governance function within a software-as-a-service organization managed SaaS renewals for a dedicated portfolio of GTM tools without a formalized process, a defined operating cadence, or structured documentation standards. As the portfolio grew in scale and complexity, the absence of standardized operating infrastructure became increasingly visible.
+
+### Pain Points
+
+**Absence of a standardized operating procedure**
+There was no consistent framework governing how renewals were planned, sequenced, or documented. Without a defined standard, the approach varied across renewals — making it difficult to ensure consistent outcomes, maintain accountability, or build on prior cycles systematically.
+
+**Compressed analysis windows**
+A thorough utilization analysis — user-level reporting, business context documentation, use case collection, capacity assessment — requires time and dedicated focus. Without a defined lead time built into the process, structured analysis was deprioritized in favor of execution on several renewals of major systems, particularly during periods of competing priorities. Rationalization opportunities — right-sizing, descoping, feature license optimization — were structurally difficult to surface as a result. Not because they didn't exist, but because there was rarely enough runway to find them.
+
+**No consistent stakeholder loop**
+Procurement, budget-owning departments, finance, and vendors were engaged reactively rather than through a structured communication sequence. This created friction and misaligned expectations at multiple points in the cycle — particularly in the commercial and approval stages where timing and clarity matter most.
+
+**No structured record of renewal decisions**
+Renewal outcomes were executed without a documented record of the analysis, recommendations, and decisions that produced them. If a decision was later questioned — on scope, pricing, or vendor terms — there was no structured artifact to reference.
+
+**Implicit process as a single point of failure**
+The renewal process relied on institutional knowledge passed informally without standardization. It couldn't be meaningfully delegated, systematically improved, or transferred intact. The function was dependent on continuity of individuals rather than on a repeatable, documented system.
+
+---
+
+The cost of this state was not dramatic — it was cumulative. Renewals got done. But strategic decisions were missed. Friction accumulated. And the function stayed dependent on tribal knowledge rather than growing into something the team could operate and build on.
+
+> **Key Points**
+> - No standardized operating procedure across a 60+ system portfolio
+> - Structured analysis consistently deprioritized under compressed timelines
+> - Rationalization opportunities structurally invisible — not absent, just unfindable
+> - Renewal process a single point of failure — lived in institutional knowledge, not a system`,
       },
       {
-        heading: "The Approach",
-        body: "Designed an end-to-end renewal operations framework covering intake, evaluation, negotiation prep, approval routing, and post-renewal documentation. Established a centralized contract registry with standardized fields for every SaaS agreement, linked to utilization data from the license monitoring pipeline.",
+        heading: "Role and Scope",
+        body: `I designed and operationalized the end-to-end SaaS renewal function within an internal technology operations team at a software-as-a-service organization — formalizing and documenting what had previously been an informal, undocumented process with no standardized framework to build from.
+
+| | |
+|---|---|
+| **Scope** | Full GTM SaaS portfolio — 60+ systems across sales, marketing, revenue operations, and customer success |
+| **Role** | Sole designer and implementer — process architecture, tooling, documentation, stakeholder communication standards, and adoption |
+| **Approach** | Observed and ran 10–12 major renewals over 7–8 months before formalizing — the process was built from operational reality, not designed in a vacuum |
+
+> **Key Points**
+> - Greenfield mandate — no predecessor process, no template, no documentation to inherit
+> - 10–12 live renewals observed before formalization — pattern recognition before standardization
+> - Sole ownership across every layer: process, tooling, documentation, and adoption`,
       },
       {
-        heading: "Key Decisions",
-        body: "Prioritized process design over tooling — the framework needed to work regardless of which procurement or contract management platform the org adopted. Built in structured decision points (renew, consolidate, renegotiate, sunset) with clear criteria at each stage.",
+        heading: "What I Built",
+        body: `The work produced four interconnected layers — each addressing a distinct gap in how the function planned, executed, and tracked renewals.
+
+### Layer 1 — The Renewal Workflow
+
+Two end-to-end process maps — one governing renewals, one governing seat and license expansions — designed and documented from scratch as the first standardized operating procedure the function had run against. Both workflows are orchestrated by Systems Governance across defined swim lanes: business owners, procurement, finance, and the vendor each own specific stages, with Systems Governance holding process ownership end-to-end.
+
+The renewal cycle triggers at 70 days. The expansion cycle triggers when a product manager submits a request through the Systems Governance portal. Both share a mandatory finance validation gate and a structured analysis phase that protects the work needed to make informed, defensible decisions before any commercial or procurement action is taken.
+
+[→ Full workflow documentation: step-by-step process guide](/projects/saas-renewal-operations/workflow)
+
+### Layer 2 — The Tooling Layer
+
+A Systems Governance portal was built to serve as the operational home for the function. Every renewal is logged as a ticket at initiation. Every expansion request is submitted by product managers through the portal directly. The Renewal Brief is attached to every ticket — keeping all context collocated with the work item. The portal replaced ad-hoc tracking with a structured, auditable record of every active and historical renewal and expansion in one place.
+
+### Layer 3 — The Analytical Output
+
+The structured analysis phase — protected by the 70-day lead time — is the mechanism through which strategic decisions become possible. Several renewals executed under the process produced rationalization and right-sizing outcomes that would have been difficult to surface under the previous ad-hoc approach, simply because there was now enough time and structure to do the analysis properly.
+
+The Renewal Brief formalizes this output into a consistent artifact at the close of every cycle:
+
+| Field | Description |
+|---|---|
+| Renewal decision | Renew / not renew |
+| Scope change | Expand / descope / no change — with justification |
+| License counts | Current and renewal figures |
+| Pricing | Current and renewal terms |
+| Cost savings | Where applicable |
+| Linked documentation | Users analysis sheet, business context doc, PO reference |
+
+Every renewal produces one — creating a documented record of every decision made, the analysis behind it, and the outcome it produced.
+
+### Layer 4 — The Visibility Infrastructure
+
+A three-layer data infrastructure provides continuous, portfolio-wide renewal visibility.
+
+| Layer | What it is |
+|---|---|
+| **Contracts source of truth** | Structured model covering all 60+ systems: renewal dates, license counts, contract values, pricing, vendor contacts. Single input layer — one change propagates automatically throughout |
+| **Connected data warehouse** | Derives from the contracts model automatically. No manual sync, no duplicate entry |
+| **Looker dashboard** | Clean renewal-focused view: all systems sorted by renewal date, calculated days-to-renewal field, three-tier color-coded prioritization flag |
+
+Dashboard summary tiles surface: total systems count, renewals due this month, and systems currently inside the 70-day process window. When the dashboard surfaces a system entering the window, the renewal process begins.
+
+> **Key Points**
+> - First standardized, documented renewal and expansion operating procedure for the function
+> - 70-day lead time structurally protects the analysis window — not a guideline, a process gate
+> - Finance validation is a mandatory gate in both workflows — no advancement without budget confirmation
+> - Single input layer in the contracts source of truth — one entry point, everything else derives automatically
+> - Renewal Brief produces a documented record of every renewal decision across the full portfolio`,
       },
       {
-        heading: "Results",
-        body: "Shifted renewal conversations from reactive to proactive, typically engaging 90+ days before expiry. Enabled consolidation analysis that identified redundant tools across departments. Gave leadership portfolio-level visibility into SaaS spend and contract risk for the first time.",
+        heading: "Outcomes",
+        body: `The work produced outcomes across three distinct dimensions.
+
+| Dimension | Outcome |
+|---|---|
+| **Operational** | Renewals run against a defined 70-day process window, surfaced automatically through the dashboard. Ad-hoc start replaced by a visible, prioritized pipeline. Structured communication sequencing and early stakeholder mapping eliminated reactive engagement across procurement, finance, vendors, and business owners. |
+| **Strategic** | The mandatory analysis phase created the conditions for strategic decisions that were structurally difficult to surface before. Several renewals produced rationalization and right-sizing outcomes identified through structured usage analysis done in advance — opportunities that existed before but were invisible without the time and structure to find them. |
+| **Organizational** | The function is now delegable and repeatable. Process, tooling, documentation standards, and portal are all in place. A new team member onboards against a documented system — not against whoever held the institutional knowledge before. The function depends on a process, not on individuals. |
+
+> **Key Points**
+> - Defined 70-day renewal window replaced ad-hoc, as-needed start across 60+ systems
+> - Strategic rationalization opportunities surfaced as a direct result of protected analysis time
+> - Function is now fully delegable — documented system over institutional knowledge`,
+      },
+      {
+        heading: "Design Decisions Worth Calling Out",
+        body: `Three deliberate choices shaped how this process was built — and why it holds up under operational pressure.
+
+**The analysis phase is mandatory, not optional**
+In an ad-hoc renewal process, structured analysis is the first thing dropped when timelines compress. A proper utilization review — user-level usage data, business context documentation, use case collection — requires dedicated time that a reactive approach rarely protects. The decision to mandate the analysis phase as a fixed, sequenced step inside a 70-day window was deliberate: the only way to consistently produce it was to make skipping it structurally difficult.
+
+**The portal as the operational home, not a tracking spreadsheet**
+A shared spreadsheet could have tracked renewals. The decision to build a structured portal went further — creating a formal intake system with defined workflows for both internal logging and external stakeholder requests. Every renewal and expansion has a ticket, a brief, and a documented record. The portal made the process auditable by default, not by effort.
+
+**One input layer — everything else derives from it**
+The contracts source of truth is built around a single input tab. One entry point for any change — the rest of the model, the connected data warehouse, and the Looker dashboard update automatically. The alternative — maintaining data in multiple places — produces version drift and erodes trust in the numbers over time. Centralizing input was a deliberate architectural decision, not a convenience.
+
+> **Key Points**
+> - Analysis phase is a fixed process gate — structurally protected, not effort-dependent
+> - Portal makes the process auditable by default — every cycle has a ticket, a brief, and a record
+> - Single input layer eliminates version drift across a 60+ system portfolio`,
+      },
+      {
+        heading: "What's Next",
+        body: `The process is established and operational — but the current implementation still relies on a distributed set of tools. The renewal brief lives in a document. The contracts source of truth lives in a spreadsheet. The dashboard lives in a BI tool. The portal lives in a project management platform. Each works well individually; together, they require context switching and manual upkeep that compounds across a portfolio of over 60 systems.
+
+### The Next Evolution — A Unified Renewal System
+
+The goal is a single internal tool where every component of the renewal function lives in one place.
+
+| Component | Current State | Target State |
+|---|---|---|
+| Contracts data | Manually maintained spreadsheet | Form-based data model — updated through structured input, not direct sheet edits |
+| Renewal dashboard | Separate BI tool, derives from spreadsheet | Auto-generated from the contracts data model — always current |
+| Renewal workspace | Google Doc brief + Jira ticket | Auto-generated renewal record per system when the 70-day window opens — full cycle worked through in one place |
+| Documentation | Distributed across multiple tools | Centralized within the renewal record — brief, analysis, decisions, and close-out in one view |
+
+When a system enters the renewal window, the tool surfaces it as an active record — a dedicated workspace where the full renewal cycle can be completed without leaving the system. No context switching. No manual propagation of data across tools.
+
+### What That Unlocks
+
+With operational overhead removed, the function's analytical capacity shifts. The focus moves from keeping the process running to extracting more value from it — deeper SKU-level optimization, feature license rationalization, and more sophisticated commercial positioning at renewal. That is where the next layer of impact lives.
+
+> **Key Points**
+> - Current implementation is functional but distributed — context switching and manual upkeep across 60+ renewals is the remaining friction
+> - Target state: a unified internal tool where contracts data, dashboard, renewal workspace, and documentation live in one place
+> - Consolidation unlocks capacity for higher-value analytical work — SKU-level optimization and feature license rationalization`,
       },
     ],
   },
