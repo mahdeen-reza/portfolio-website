@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { projects } from "@/lib/projects";
+import Markdown from "@/components/Markdown";
 
 export async function generateStaticParams() {
   return projects.map((p) => ({ slug: p.slug }));
@@ -114,9 +115,7 @@ export default async function CaseStudyPage({
                 <h2 className="font-display font-semibold text-[clamp(22px,3vw,32px)] tracking-[-0.03em] leading-[1.15] text-dark mb-4">
                   {section.heading}
                 </h2>
-                <p className="font-body text-[15px] leading-[1.8] text-dark/75">
-                  {section.body}
-                </p>
+                <Markdown content={section.body} />
               </section>
             ))}
           </div>
