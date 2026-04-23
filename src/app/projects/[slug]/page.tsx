@@ -18,7 +18,7 @@ export async function generateMetadata({
   if (!project) return {};
 
   return {
-    title: `${project.name} | Mahdeen Reza`,
+    title: `Case Study: ${project.name} | Mahdeen Reza`,
     description: project.description,
   };
 }
@@ -33,29 +33,32 @@ export default async function CaseStudyPage({
   if (!project) notFound();
 
   return (
-    <main className="pt-16">
-      <article className="bg-cream py-16 md:py-24">
-        <div className="max-w-[800px] mx-auto px-6 md:px-12 lg:px-16">
+    <main className="pt-16 bg-warm-sand">
+      <article id="case-study" className="bg-warm-sand pt-12 pb-20 md:pt-16 md:pb-28">
+        <div className="max-w-[1600px] mx-auto px-6 md:px-12 lg:px-20 w-full">
           {/* Back link */}
           <Link
             href="/projects"
-            className="inline-block font-body text-[13px] font-medium text-terracotta transition-colors duration-200 hover:text-terracotta-dark mb-10"
+            className="inline-block font-body text-[13px] font-medium text-terracotta transition-colors duration-200 hover:text-terracotta-dark mb-6"
           >
             &larr; Back to projects
           </Link>
 
           {/* Title */}
-          <h1 className="font-display font-bold text-[clamp(32px,5vw,56px)] tracking-[-0.04em] leading-[1.05] text-dark mb-8">
-            {project.name}
+          <h1 className="font-display font-bold text-[clamp(38px,5.5vw,72px)] uppercase tracking-[-0.03em] text-terracotta -mb-1">
+            Case Study
           </h1>
+          <p className="font-display font-bold text-[clamp(26px,3.5vw,34px)] tracking-[-0.02em] text-dark mb-6">
+            {project.name}
+          </p>
 
           {/* Metadata bar */}
-          <div className="flex flex-wrap gap-x-6 sm:gap-x-8 gap-y-4 pb-8 mb-12 border-b border-border">
+          <div className="flex flex-wrap gap-x-6 sm:gap-x-8 gap-y-4 pb-8 mb-12 border-b border-dark/10">
             <div>
               <span className="block font-body text-[11px] uppercase tracking-[0.1em] text-muted mb-1">
                 Role
               </span>
-              <span className="font-body text-sm text-dark">
+              <span className="font-body text-[16px] text-dark">
                 {project.role}
               </span>
             </div>
@@ -63,7 +66,7 @@ export default async function CaseStudyPage({
               <span className="block font-body text-[11px] uppercase tracking-[0.1em] text-muted mb-1">
                 Status
               </span>
-              <span className="font-body text-sm text-dark">
+              <span className="font-body text-[16px] text-dark">
                 {project.status}
               </span>
             </div>
@@ -75,7 +78,7 @@ export default async function CaseStudyPage({
                 {project.tags.map((tag) => (
                   <span
                     key={tag}
-                    className="font-body text-[11px] font-medium text-terracotta bg-terracotta/10 px-2 py-0.5 rounded-md"
+                    className="font-body text-[13px] font-medium text-terracotta bg-terracotta/15 border border-terracotta/30 px-3 py-1.5 rounded-md"
                   >
                     {tag}
                   </span>
@@ -89,7 +92,7 @@ export default async function CaseStudyPage({
                     href={project.github}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="font-body text-sm text-dark/70 transition-colors duration-200 hover:text-terracotta py-1"
+                    className="font-body text-[16px] text-terracotta transition-colors duration-200 hover:text-terracotta-dark py-1"
                   >
                     GitHub &rarr;
                   </Link>
@@ -99,7 +102,7 @@ export default async function CaseStudyPage({
                     href={project.demo}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="font-body text-sm text-dark/70 transition-colors duration-200 hover:text-terracotta py-1"
+                    className="font-body text-[16px] text-terracotta transition-colors duration-200 hover:text-terracotta-dark py-1"
                   >
                     Live demo &rarr;
                   </Link>
@@ -109,10 +112,10 @@ export default async function CaseStudyPage({
           </div>
 
           {/* Content sections */}
-          <div className="flex flex-col gap-12">
+          <div className="flex flex-col gap-16 max-w-[900px]">
             {project.sections.map((section) => (
               <section key={section.heading}>
-                <h2 className="font-display font-semibold text-[clamp(22px,3vw,32px)] tracking-[-0.03em] leading-[1.15] text-dark mb-4">
+                <h2 className="font-display font-bold text-[clamp(26px,3.5vw,34px)] tracking-[-0.02em] text-dark mb-6">
                   {section.heading}
                 </h2>
                 <Markdown content={section.body} />

@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import Markdown from "@/components/Markdown";
 
 export const metadata: Metadata = {
-  title: "SaaS Renewal & Expansion Workflow | Mahdeen Reza",
+  title: "Workflow Documentation: SaaS Renewal & Expansion | Mahdeen Reza",
   description:
     "Comprehensive process reference for SaaS tool renewals and seat expansions — covering initiation through close-out.",
 };
@@ -181,31 +181,34 @@ The contracts source of truth is updated with the revised license count, cost, a
 
 export default function WorkflowPage() {
   return (
-    <main className="pt-16">
-      <article className="bg-cream py-16 md:py-24">
-        <div className="max-w-[800px] mx-auto px-6 md:px-12 lg:px-16">
+    <main className="pt-16 bg-warm-sand">
+      <article id="case-study" className="bg-warm-sand pt-12 pb-20 md:pt-16 md:pb-28">
+        <div className="max-w-[1600px] mx-auto px-6 md:px-12 lg:px-20 w-full">
           {/* Back link */}
           <Link
             href="/projects/saas-renewal-operations"
-            className="inline-block font-body text-[13px] font-medium text-terracotta transition-colors duration-200 hover:text-terracotta-dark mb-10"
+            className="inline-block font-body text-[13px] font-medium text-terracotta transition-colors duration-200 hover:text-terracotta-dark mb-6"
           >
             &larr; Back to case study
           </Link>
 
           {/* Title */}
-          <h1 className="font-display font-bold text-[clamp(32px,5vw,56px)] tracking-[-0.04em] leading-[1.05] text-dark mb-4">
-            SaaS Renewal & Expansion Workflow Documentation
+          <h1 className="font-display font-bold text-[clamp(38px,5.5vw,72px)] uppercase tracking-[-0.03em] text-terracotta -mb-1">
+            Workflow
           </h1>
+          <p className="font-display font-bold text-[clamp(26px,3.5vw,34px)] tracking-[-0.02em] text-dark mb-4">
+            SaaS Renewal & Expansion Documentation
+          </p>
 
           {/* Subtitle */}
-          <p className="font-body text-[15px] leading-[1.8] text-dark/60 mb-8">
+          <p className="font-body text-[20px] leading-[1.7] text-charcoal/60 mb-8">
             Function: Technology Operations — Systems Governance | Portfolio: GTM
             SaaS Portfolio | Version: 1.0
           </p>
 
           {/* Intro */}
-          <div className="pb-8 mb-12 border-b border-border">
-            <p className="font-body text-[15px] leading-[1.8] text-dark/75">
+          <div className="pb-8 mb-12 border-b border-dark/10">
+            <p className="font-body text-[20px] leading-[1.7] text-charcoal">
               Comprehensive process reference for SaaS tool renewals and seat
               expansions — covering initiation through close-out, including
               decision logic and swim lane ownership at every stage. The Systems
@@ -216,10 +219,10 @@ export default function WorkflowPage() {
           </div>
 
           {/* Content sections */}
-          <div className="flex flex-col gap-12">
+          <div className="flex flex-col gap-16 max-w-[900px]">
             {sections.map((section) => (
               <section key={section.heading}>
-                <h2 className="font-display font-semibold text-[clamp(22px,3vw,32px)] tracking-[-0.03em] leading-[1.15] text-dark mb-4">
+                <h2 className="font-display font-bold text-[clamp(26px,3.5vw,34px)] tracking-[-0.02em] text-dark mb-6">
                   {section.heading}
                 </h2>
                 <Markdown content={section.body} />

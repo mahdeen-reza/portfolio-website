@@ -48,7 +48,7 @@ export default function About() {
     <section
       ref={sectionRef}
       id="about"
-      className="bg-cream overflow-hidden scroll-mt-16 py-8 md:py-12"
+      className="bg-white overflow-hidden scroll-mt-16 pt-8 md:pt-12"
     >
       <motion.div
         style={
@@ -56,7 +56,7 @@ export default function About() {
             ? {}
             : { scale, borderRadius }
         }
-        className="bg-white min-h-[calc(85vh-54px)] flex flex-col pt-12 pb-20 md:pt-16 md:pb-28 origin-center"
+        className="bg-warm-sand min-h-[calc(85vh-54px)] flex flex-col pt-12 pb-20 md:pt-16 md:pb-28 origin-center"
       >
         <div className="max-w-[1600px] mx-auto px-6 md:px-12 lg:px-20 w-full">
           {/* Section heading */}
@@ -84,7 +84,7 @@ export default function About() {
               className="flex flex-col will-change-transform"
             >
               <Image
-                src="/Lightspeed_Portraits_Feb20_2025_Mahdeen Reza Amin.jpg"
+                src="/portrait.jpg"
                 alt="Mahdeen Reza"
                 width={600}
                 height={800}

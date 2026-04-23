@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 export default function ProjectsPage() {
   return (
-    <main className="pt-16">
+    <main className="pt-16 bg-warm-sand">
       <Projects showBackLink />
     </main>
   );

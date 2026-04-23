@@ -14,10 +14,11 @@ const NAV_LINKS = [
 /* Section ID → background color mapping */
 const SECTION_COLORS: Record<string, { bg: string; dark: boolean }> = {
   hero: { bg: "#FAF9F6", dark: false },       // cream
-  projects: { bg: "#E8E3D9", dark: false },    // warm sand
-  skills: { bg: "#FAF9F6", dark: false },      // cream
-  about: { bg: "#FFFFFF", dark: false },       // white
+  projects: { bg: "#DBD6C9", dark: false },    // warm sand
+  skills: { bg: "#FFFFFF", dark: false },      // white
+  about: { bg: "#FFFFFF", dark: false },       // white (outer section)
   contact: { bg: "#1A1A1A", dark: true },      // dark
+  "case-study": { bg: "#DBD6C9", dark: false }, // warm sand (case study pages)
 };
 
 export default function Navbar() {
@@ -28,7 +29,7 @@ export default function Navbar() {
 
   const updateActiveSection = useCallback(() => {
     const navHeight = 72; // ~h-18
-    const sections = document.querySelectorAll("section[id], footer[id]");
+    const sections = document.querySelectorAll("section[id], article[id], footer[id]");
     let currentBg = "#FAF9F6";
     let currentDark = false;
 
@@ -40,6 +41,17 @@ export default function Navbar() {
         if (mapping) {
           currentBg = mapping.bg;
           currentDark = mapping.dark;
+        }
+
+        // About: switch to sand-light when inner container reaches navbar
+        if (id === "about") {
+          const inner = section.querySelector(":scope > div");
+          if (inner) {
+            const innerRect = inner.getBoundingClientRect();
+            if (innerRect.top <= navHeight) {
+              currentBg = "#DBD6C9"; // warm sand
+            }
+          }
         }
       }
     });

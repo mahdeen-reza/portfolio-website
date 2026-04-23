@@ -18,6 +18,7 @@ const METRICS = [
   { value: "100%", label: "SOX ITGC pass rate", icon: "compliance" as const, color: "#2D6A5D" },
   { value: "60+", label: "Systems managed", icon: "systems" as const, color: "#8B6544" },
   { value: "3+", label: "Years in SaaS ops", icon: "experience" as const, color: "#B5654A" },
+  { value: "—", label: "Coming soon", icon: "experience" as const, color: "#B5654A" },
 ];
 
 /* ── Metric SVG icons ── */
@@ -56,8 +57,8 @@ function MetricIcon({ type, color }: { type: "cost" | "compliance" | "systems" |
 
   return (
     <motion.svg
-      width="36"
-      height="36"
+      width="28"
+      height="28"
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
@@ -91,9 +92,9 @@ export default function Projects({
   return (
     <section
       id="projects"
-      className="bg-warm-sand min-h-[calc(100vh-64px)] flex flex-col justify-center scroll-mt-16 pt-12 pb-20 md:pt-16 md:pb-28"
+      className="bg-warm-sand flex flex-col scroll-mt-16 pt-12 pb-20 md:pt-16 md:pb-28"
     >
-      <div className="max-w-[1600px] mx-auto px-6 md:px-12 lg:px-20 w-full">
+      <div className="px-6 md:px-12 lg:px-20 w-full">
         {/* Back link (projects page only) */}
         {showBackLink && (
           <Link
@@ -110,95 +111,82 @@ export default function Projects({
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
-          className="font-display font-bold text-[clamp(38px,5.5vw,72px)] uppercase tracking-[-0.03em] text-terracotta mb-2"
+          className="font-display font-bold text-[clamp(38px,5.5vw,72px)] uppercase tracking-[-0.03em] text-terracotta -mb-1"
         >
           Projects
         </motion.h2>
 
-        {/* Sub-headings row */}
-        <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-x-16 gap-y-2 mb-3">
-          <motion.h3
-            variants={fadeUp}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            className="font-display font-bold text-[clamp(26px,3.5vw,34px)] tracking-[-0.02em] text-dark"
-          >
-            {preview ? "Selected Work" : "All Projects"}
-          </motion.h3>
-          <motion.h3
-            variants={fadeUp}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            className="font-display font-bold text-[clamp(26px,3.5vw,34px)] tracking-[-0.02em] text-dark lg:text-right"
-          >
-            Key Impact Metrics
-          </motion.h3>
-        </div>
+        {/* Sub-heading */}
+        <motion.h3
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          className="font-display font-bold text-[clamp(26px,3.5vw,34px)] tracking-[-0.02em] text-dark mb-4"
+        >
+          {preview ? "Selected Work" : "All Projects"}
+        </motion.h3>
 
-        {/* Content row — cards + metrics */}
-        <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-x-16 gap-y-8 items-start">
-          {/* ── Left: cards + button ── */}
-          <div className="flex flex-col">
-            <motion.div
-              variants={staggerContainerWide}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-100px" }}
-              className="flex flex-col gap-4"
-            >
-              {displayed.map((project) => (
-                <ProjectCard key={project.slug} project={project} />
-              ))}
-            </motion.div>
+        {/* Cards — 2-column grid */}
+        <motion.div
+          variants={staggerContainerWide}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          className="grid grid-cols-1 md:grid-cols-2 gap-4"
+        >
+          {displayed.map((project) => (
+            <ProjectCard key={project.slug} project={project} />
+          ))}
+        </motion.div>
 
-            {preview && (
-              <motion.div
-                variants={fadeUpSubtle}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true }}
-                className="mt-4 flex justify-end"
-              >
-                <Link
-                  href="/projects"
-                  className="inline-flex items-center gap-2 bg-terracotta text-cream font-body text-[16px] font-medium tracking-[0.04em] px-6 py-2.5 rounded-lg transition-colors duration-200 hover:bg-terracotta-dark w-full justify-center lg:w-auto"
-                >
-                  View all projects
-                  <span aria-hidden="true">&rarr;</span>
-                </Link>
-              </motion.div>
-            )}
-          </div>
-
-          {/* ── Right: metrics — right-aligned, icons on right ── */}
+        {preview && (
           <motion.div
+            variants={fadeUpSubtle}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
-            variants={staggerContainer}
-            className="flex flex-col gap-5 py-2 items-end"
+            className="mt-4 flex justify-end"
           >
-            {METRICS.map((metric) => (
-              <motion.div
-                key={metric.label}
-                variants={fadeUpSubtle}
-                className="flex flex-row-reverse items-center gap-4"
-              >
-                <MetricIcon type={metric.icon} color={metric.color} />
-                <div className="text-right">
-                  <span className="block font-display font-bold text-[clamp(26px,3vw,36px)] tracking-[-0.03em] text-terracotta leading-none">
-                    {metric.value}
-                  </span>
-                  <span className="block font-body text-[14px] text-muted tracking-[0.02em] leading-[1.4] mt-1">
-                    {metric.label}
-                  </span>
-                </div>
-              </motion.div>
-            ))}
+            <Link
+              href="/projects"
+              className="inline-flex items-center gap-2 bg-terracotta text-cream font-body text-[16px] font-medium tracking-[0.04em] px-6 py-2.5 rounded-lg transition-colors duration-200 hover:bg-terracotta-dark w-full justify-center lg:w-auto"
+            >
+              View all projects
+              <span aria-hidden="true">&rarr;</span>
+            </Link>
           </motion.div>
-        </div>
+        )}
+
+      </div>
+
+      {/* ── Impact metrics — constrained to match About/Skills width ── */}
+      <div className="max-w-[1600px] mx-auto px-6 md:px-12 lg:px-20 w-full">
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={staggerContainer}
+          className="grid grid-cols-2 md:grid-cols-5 gap-4 md:gap-6 mt-16"
+        >
+          {METRICS.map((metric) => (
+            <motion.div
+              key={metric.label}
+              variants={fadeUpSubtle}
+              className="flex items-center gap-3"
+            >
+              <MetricIcon type={metric.icon} color={metric.color} />
+              <div>
+                <span className="block font-display font-bold text-[clamp(22px,2.5vw,30px)] tracking-[-0.03em] text-terracotta leading-none">
+                  {metric.value}
+                </span>
+                <span className="block font-body text-[13px] text-charcoal tracking-[0.02em] leading-[1.4] mt-1">
+                  {metric.label}
+                </span>
+              </div>
+            </motion.div>
+          ))}
+        </motion.div>
       </div>
     </section>
   );
