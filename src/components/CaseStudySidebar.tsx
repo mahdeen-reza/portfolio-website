@@ -211,7 +211,7 @@ export default function CaseStudySidebar({
                   <button
                     type="button"
                     onClick={() => scrollToId(id)}
-                    className={`flex items-start gap-2 py-0.5 text-[13px] font-body transition-colors duration-200 border-l-2 pl-2 text-left w-full ${
+                    className={`flex items-start gap-2 py-0.5 text-[13px] font-body transition-colors duration-200 border-l-2 pl-2 text-left w-full select-none ${
                       isActive
                         ? "text-terracotta font-medium border-terracotta"
                         : "text-muted hover:text-dark border-transparent"
@@ -229,7 +229,7 @@ export default function CaseStudySidebar({
               <button
                 type="button"
                 onClick={scrollToTop}
-                className="flex items-center gap-2 py-0.5 pl-2 text-[12px] font-body text-muted/50 hover:text-muted transition-colors duration-200 border-l-2 border-transparent mt-2"
+                className="flex items-center gap-2 py-0.5 pl-2 text-[12px] font-body text-muted/50 hover:text-muted transition-colors duration-200 border-l-2 border-transparent mt-2 select-none"
               >
                 &uarr; Back to top
               </button>

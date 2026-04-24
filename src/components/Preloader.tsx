@@ -3,14 +3,15 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { EASE_OUT_EXPO } from "@/lib/animations";
-import { markPreloaderDone } from "@/lib/usePreloaderDone";
+import { markPreloaderDone, isPreloaderDone } from "@/lib/usePreloaderDone";
 
 export default function Preloader() {
   const [show, setShow] = useState(false);
   const [phase, setPhase] = useState<"fade-in" | "exit">("fade-in");
 
   useEffect(() => {
-    // Lock scroll during preloader
+    if (isPreloaderDone()) return;
+
     document.body.style.overflow = "hidden";
     setShow(true);
 

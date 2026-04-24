@@ -1,6 +1,6 @@
 "use client";
 
-import { useSyncExternalStore, useCallback } from "react";
+import { useSyncExternalStore } from "react";
 
 // Tiny pub/sub for preloader → hero coordination.
 // Fires once when the preloader exit animation starts (or immediately if skipped).
@@ -20,6 +20,10 @@ function getSnapshot() {
 export function markPreloaderDone() {
   done = true;
   listeners.forEach((cb) => cb());
+}
+
+export function isPreloaderDone() {
+  return done;
 }
 
 export function usePreloaderDone() {

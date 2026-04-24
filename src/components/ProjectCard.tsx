@@ -13,7 +13,7 @@ export default function ProjectCard({ project }: { project: Project }) {
     <motion.div variants={fadeUp} className="group h-full">
       <Link
         href={`/projects/${project.slug}`}
-        className="flex flex-col h-full transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-terracotta/10"
+        className="flex flex-col h-full transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-terracotta/10 select-none"
       >
         {/* Folder tab */}
         <div className="self-start inline-block bg-dark/[0.06] border border-dark/15 border-b-0 rounded-t-lg px-5 py-1.5 transition-all duration-300 group-hover:bg-terracotta/[0.06] group-hover:border-terracotta/30">

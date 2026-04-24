@@ -96,7 +96,7 @@ export default function About() {
                 href="/resume.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 w-full bg-terracotta text-cream font-body text-[16px] font-medium tracking-[0.04em] px-6 py-3 rounded-lg transition-colors duration-200 hover:bg-terracotta-dark mt-4"
+                className="inline-flex items-center justify-center gap-2 w-full bg-terracotta text-cream font-body text-[16px] font-medium tracking-[0.04em] px-6 py-3 rounded-lg transition-colors duration-200 hover:bg-terracotta-dark mt-4 select-none"
               >
                 Download Resume
                 <svg

@@ -16,6 +16,14 @@ export default function Markdown({ content }: { content: string }) {
               alt={alt || ""}
             />
           ),
+          p: ({ children, node }) => {
+            const hasImg = node?.children?.some(
+              (child: any) =>
+                child.type === "element" && child.tagName === "img"
+            );
+            if (hasImg) return <>{children}</>;
+            return <p>{children}</p>;
+          },
         }}
       >
         {content}

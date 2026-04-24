@@ -4,9 +4,10 @@ import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "motion/react";
 import { EASE_OUT_EXPO } from "@/lib/animations";
+import { useProjectsOverlay } from "@/context/ProjectsOverlayContext";
 
 const NAV_LINKS = [
-  { label: "PROJECTS", href: "/projects" },
+  { label: "PROJECTS", href: "/#projects" },
   { label: "SKILLS", href: "/#skills" },
   { label: "ABOUT", href: "/#about" },
 ];
@@ -22,6 +23,7 @@ const SECTION_COLORS: Record<string, { bg: string; dark: boolean }> = {
 };
 
 export default function Navbar() {
+  const { open: openOverlay } = useProjectsOverlay();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeBg, setActiveBg] = useState("#FAF9F6");
@@ -78,6 +80,30 @@ export default function Navbar() {
     };
   }, [menuOpen]);
 
+  const handleProjectsClick = useCallback(
+    (e: React.MouseEvent) => {
+      e.preventDefault();
+      setMenuOpen(false);
+
+      const projectsSection = document.getElementById("projects");
+      if (!projectsSection) {
+        openOverlay();
+        return;
+      }
+
+      const rect = projectsSection.getBoundingClientRect();
+      const isNearby = Math.abs(rect.top) < 200;
+
+      if (isNearby) {
+        openOverlay();
+      } else {
+        projectsSection.scrollIntoView({ behavior: "smooth" });
+        setTimeout(() => openOverlay(), 400);
+      }
+    },
+    [openOverlay]
+  );
+
   const textColor = isDark ? "text-white" : "text-dark";
   const textMutedColor = isDark ? "text-white/70" : "text-dark/70";
   const logoClasses = isDark
@@ -99,29 +125,33 @@ export default function Navbar() {
         {/* Logo */}
         <Link
           href="/"
-          className={`justify-self-start rounded-none px-4.5 py-2 font-display font-semibold text-[18px] tracking-[-0.02em] transition-colors duration-500 ${logoClasses}`}
+          className={`justify-self-start rounded-none px-4.5 py-2 font-display font-semibold text-[18px] tracking-[-0.02em] transition-colors duration-500 select-none ${logoClasses}`}
         >
           Mahdeen Reza Amin
         </Link>
 
         {/* Desktop nav links */}
         <div className="hidden md:flex items-center gap-10 justify-self-center">
-          {NAV_LINKS.map((link) => (
-            <Link
-              key={link.label}
-              href={link.href}
-              className={`group relative font-body text-[16px] font-medium tracking-[0.04em] transition-colors duration-500 hover:${textColor} ${textMutedColor}`}
-            >
-              {link.label}
-              <span className="absolute left-0 -bottom-0.5 h-[2px] w-0 bg-terracotta transition-all duration-300 group-hover:w-full" />
-            </Link>
-          ))}
+          {NAV_LINKS.map((link) => {
+            const isProjects = link.label === "PROJECTS";
+            return (
+              <Link
+                key={link.label}
+                href={link.href}
+                onClick={isProjects ? handleProjectsClick : undefined}
+                className={`group relative font-body text-[16px] font-medium tracking-[0.04em] transition-colors duration-500 select-none hover:${textColor} ${textMutedColor}`}
+              >
+                {link.label}
+                <span className="absolute left-0 -bottom-0.5 h-[2px] w-0 bg-terracotta transition-all duration-300 group-hover:w-full" />
+              </Link>
+            );
+          })}
         </div>
 
         {/* Desktop CTA */}
         <Link
           href="/#contact"
-          className={`hidden md:block justify-self-end font-body text-[16px] font-medium tracking-[0.04em] px-4.5 py-2 rounded-lg transition-colors duration-500 ${ctaClasses}`}
+          className={`hidden md:block justify-self-end font-body text-[16px] font-medium tracking-[0.04em] px-4.5 py-2 rounded-lg transition-colors duration-500 select-none ${ctaClasses}`}
         >
           CONNECT
         </Link>
@@ -129,7 +159,7 @@ export default function Navbar() {
         {/* Mobile hamburger */}
         <button
           onClick={() => setMenuOpen(!menuOpen)}
-          className="md:hidden justify-self-end flex flex-col justify-center items-center w-11 h-11 -mr-1.5 gap-1.5"
+          className="md:hidden justify-self-end flex flex-col justify-center items-center w-11 h-11 -mr-1.5 gap-1.5 select-none"
           aria-label={menuOpen ? "Close menu" : "Open menu"}
         >
           <span
@@ -161,20 +191,23 @@ export default function Navbar() {
             className="md:hidden overflow-hidden bg-cream border-b border-border"
           >
             <div className="px-6 py-5 flex flex-col gap-1">
-              {NAV_LINKS.map((link) => (
-                <Link
-                  key={link.label}
-                  href={link.href}
-                  onClick={() => setMenuOpen(false)}
-                  className="font-body text-[16px] font-medium text-dark/80 tracking-[0.04em] transition-colors duration-200 hover:text-dark py-2"
-                >
-                  {link.label}
-                </Link>
-              ))}
+              {NAV_LINKS.map((link) => {
+                const isProjects = link.label === "PROJECTS";
+                return (
+                  <Link
+                    key={link.label}
+                    href={link.href}
+                    onClick={isProjects ? handleProjectsClick : () => setMenuOpen(false)}
+                    className="font-body text-[16px] font-medium text-dark/80 tracking-[0.04em] transition-colors duration-200 hover:text-dark py-2 select-none"
+                  >
+                    {link.label}
+                  </Link>
+                );
+              })}
               <Link
                 href="/#contact"
                 onClick={() => setMenuOpen(false)}
-                className="font-body text-[16px] font-medium text-dark tracking-[0.04em] bg-warm px-4.5 py-2 rounded-lg transition-colors duration-200 hover:bg-terracotta-dark hover:text-cream mt-2"
+                className="font-body text-[16px] font-medium text-dark tracking-[0.04em] bg-warm px-4.5 py-2 rounded-lg transition-colors duration-200 hover:bg-terracotta-dark hover:text-cream mt-2 select-none"
               >
                 CONNECT
               </Link>

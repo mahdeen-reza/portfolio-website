@@ -42,10 +42,10 @@ export default async function CaseStudyPage({
           <StickyHeader>
             {/* Back link */}
             <Link
-              href="/projects"
+              href="/"
               className="inline-block font-body text-[13px] font-medium text-terracotta transition-colors duration-200 hover:text-terracotta-dark mb-2"
             >
-              &larr; Back to projects
+              &larr; Back to home
             </Link>
 
             {/* Combined heading */}

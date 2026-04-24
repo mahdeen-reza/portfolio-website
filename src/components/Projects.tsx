@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { motion } from "motion/react";
 import {
   fadeUp,
@@ -9,6 +8,7 @@ import {
   staggerContainerWide,
   EASE_SMOOTH,
 } from "@/lib/animations";
+import { useProjectsOverlay } from "@/context/ProjectsOverlayContext";
 import { projects } from "@/lib/projects";
 import ProjectCard from "@/components/ProjectCard";
 
@@ -78,13 +78,12 @@ function MetricIcon({ type, color }: { type: "cost" | "compliance" | "systems" |
 /* ── Projects section ── */
 interface ProjectsProps {
   preview?: boolean;
-  showBackLink?: boolean;
 }
 
 export default function Projects({
   preview = false,
-  showBackLink = false,
 }: ProjectsProps) {
+  const { open, triggerRef } = useProjectsOverlay();
   const displayed = preview
     ? projects.filter((p) => p.featured)
     : projects;
@@ -95,16 +94,6 @@ export default function Projects({
       className="bg-warm-sand flex flex-col scroll-mt-16 pt-12 pb-20 md:pt-16 md:pb-28"
     >
       <div className="px-6 md:px-12 lg:px-20 w-full">
-        {/* Back link (projects page only) */}
-        {showBackLink && (
-          <Link
-            href="/"
-            className="inline-block font-body text-[13px] font-medium text-terracotta transition-colors duration-200 hover:text-terracotta-dark mb-6"
-          >
-            &larr; Back to home
-          </Link>
-        )}
-
         {/* Section header */}
         <motion.h2
           variants={fadeUp}
@@ -148,13 +137,14 @@ export default function Projects({
             viewport={{ once: true }}
             className="mt-4 flex justify-end"
           >
-            <Link
-              href="/projects"
-              className="inline-flex items-center gap-2 bg-terracotta text-cream font-body text-[16px] font-medium tracking-[0.04em] px-6 py-2.5 rounded-lg transition-colors duration-200 hover:bg-terracotta-dark w-full justify-center lg:w-auto"
+            <button
+              ref={triggerRef as React.RefObject<HTMLButtonElement>}
+              onClick={open}
+              className="inline-flex items-center gap-2 bg-terracotta text-cream font-body text-[16px] font-medium tracking-[0.04em] px-6 py-2.5 rounded-lg transition-colors duration-200 hover:bg-terracotta-dark w-full justify-center lg:w-auto cursor-pointer select-none"
             >
               View all projects
               <span aria-hidden="true">&rarr;</span>
-            </Link>
+            </button>
           </motion.div>
         )}
 

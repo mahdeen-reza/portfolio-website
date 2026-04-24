@@ -175,7 +175,7 @@ export default function Footer() {
                 <Link
                   key={link.label}
                   href={link.href}
-                  className="font-body text-[23px] text-white/70 transition-colors duration-200 hover:text-terracotta whitespace-nowrap"
+                  className="font-body text-[23px] text-white/70 transition-colors duration-200 hover:text-terracotta whitespace-nowrap select-none"
                 >
                   {link.label}
                 </Link>
@@ -190,7 +190,7 @@ export default function Footer() {
                   href={link.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="font-body text-[23px] text-terracotta transition-colors duration-200 hover:text-terracotta-hover whitespace-nowrap"
+                  className="font-body text-[23px] text-terracotta transition-colors duration-200 hover:text-terracotta-hover whitespace-nowrap select-none"
                 >
                   {link.label}
                   <ExternalLinkIcon />

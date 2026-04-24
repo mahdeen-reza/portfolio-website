@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { clashDisplay, switzer } from "@/lib/fonts";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { ProjectsOverlayProvider } from "@/context/ProjectsOverlayContext";
+import ProjectsOverlay from "@/components/ProjectsOverlay";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -21,9 +23,12 @@ export default function RootLayout({
       className={`${clashDisplay.variable} ${switzer.variable}`}
     >
       <body>
-        <Navbar />
-        {children}
-        <Footer />
+        <ProjectsOverlayProvider>
+          <Navbar />
+          {children}
+          <Footer />
+          <ProjectsOverlay />
+        </ProjectsOverlayProvider>
       </body>
     </html>
   );

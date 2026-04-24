@@ -127,7 +127,7 @@ export default function Hero() {
             >
               <Link
                 href="/projects"
-                className="bg-terracotta text-cream font-body text-[19px] font-medium tracking-[0.04em] px-5.5 py-2.5 rounded-lg transition-colors duration-200 hover:bg-terracotta-dark hover:text-cream"
+                className="bg-terracotta text-cream font-body text-[19px] font-medium tracking-[0.04em] px-5.5 py-2.5 rounded-lg transition-colors duration-200 hover:bg-terracotta-dark hover:text-cream select-none"
               >
                 View projects
               </Link>
