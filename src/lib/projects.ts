@@ -81,7 +81,7 @@ prisma/
         heading: "The Problem",
         body: `When a SaaS instance runs out of available license seats, new hire onboarding stops. The only way to free capacity is a clean-up cycle -- identify inactive users, compile a removal list, and submit a support ticket. Before this tool existed, that meant exporting a usage report and an HR employee roster, loading both into a spreadsheet, manually joining them on email (which rarely matched cleanly), applying business rules from memory, and building the removal list row by row.
 
-Each cycle took approximately two hours of focused analytical work and roughly a full business day end-to-end when accounting for competing priorities. There was no audit trail -- no record of who was reviewed, what was decided, or why. Access criteria were undocumented. The entire process relied on tacit knowledge held by one person. And every clean-up started from scratch, with no memory of what happened in the previous cycle.
+Each cycle took about two hours of focused analytical work — closer to a full business day once competing priorities were factored in. There was no audit trail -- no record of who was reviewed, what was decided, or why. Access criteria were undocumented. The entire process relied on tacit knowledge held by one person. And every clean-up started from scratch, with no memory of what happened in the previous cycle.
 
 The operational cost wasn't just analyst time. It was the institutional risk of a process that couldn't be handed off, couldn't be audited, and couldn't learn from its own history.`,
       },
@@ -100,9 +100,9 @@ The domain knowledge -- how clean-ups actually work, what the edge cases are, wh
 - **Rules decision table** -- complete classification logic, the department classification framework, activity signal interpretation, and every edge case
 - **CLAUDE.md** -- project context file auto-loaded by Claude Code every development session, ensuring the AI assistant never lost context between sessions
 
-This planning-first approach meant that by the time I started building, every classification rule, every edge case, and every data flow was already specified. The documents evolved as the build progressed -- they were living references, not throwaway artifacts.
+By the time I started building, every classification rule, edge case, and data flow was already specified. The documents evolved as the build progressed -- they were working references, not one-time planning artifacts.
 
-The design philosophy was conservative throughout: when in doubt, route to Human Review. The cost of incorrectly removing a user (disrupted work, re-provisioning, escalation) always exceeds the cost of leaving one extra license seat occupied.`,
+The design philosophy was conservative throughout: when in doubt, route to Human Review. Incorrectly removing a user (disrupted work, re-provisioning, escalation) always costs more than leaving one extra license seat occupied for another cycle.`,
       },
       {
         heading: "Architecture",
@@ -124,7 +124,7 @@ Every Tier 3 (name-based) match is flagged for human verification -- the system 
 
 ### HR Enrichment
 
-Every usage export user gets enriched with full HR context: department, division, business title, product assignment, region, manager, worker type, leave status, employment status, and termination date. This context feeds directly into the classification engine.
+Every usage export user gets enriched with HR context: department, division, business title, product assignment, region, manager, worker type, leave status, employment status, and termination date. This context feeds directly into the classification engine.
 
 ### Classification Engine
 
@@ -145,17 +145,17 @@ The department classification framework protects revenue-facing users through fo
 
 ### AI Reasoning Engine
 
-The Anthropic Claude API validates and refines deterministic pre-classifications, assigns confidence levels (high, medium, low), and writes a 1-2 sentence plain-English reasoning for every user. Users are batched (25 per API call) to manage token limits. The system context includes foundational knowledge, instance-specific access criteria, and prior exception data.
+The Anthropic Claude API reviews the deterministic pre-classifications, assigns confidence levels (high, medium, low), and writes a 1-2 sentence plain-English reasoning for every user. Users are batched (25 per API call) to manage token limits. The system context includes foundational knowledge, instance-specific access criteria, and prior exception data.
 
 When no API key is configured, the pipeline runs entirely on the deterministic classifier. Classification still works -- the AI layer adds nuance, not core functionality.
 
 ### Delta Analysis
 
-Every run after the first automatically compares against the most recent previous run for the same instance. Each user is tagged with one of five delta categories: newly inactive, persistently inactive, recovered, reappeared, or net new. This means the analyst can prioritize newly inactive users for fresh review while quickly confirming persistently inactive users they've seen before.
+Every run after the first automatically compares against the most recent previous run for the same instance. Each user is tagged with one of five delta categories: newly inactive, persistently inactive, recovered, reappeared, or net new. This means the analyst can prioritize newly inactive users for fresh review while quickly confirming persistently inactive users they've already seen.
 
 ### Persistence and Audit Trail
 
-Fourteen Prisma models store the complete history: analysis runs, per-user results, action decisions, user history events, sporadic access flags, prior exceptions, chat overrides, access criteria versions, and conversation history. Every run, every classification, and every analyst decision is recorded with identity and timestamp.`,
+Fourteen Prisma models store the full history: analysis runs, per-user results, action decisions, user history events, sporadic access flags, prior exceptions, chat overrides, access criteria versions, and conversation history. Every run, every classification, and every analyst decision is recorded with identity and timestamp.`,
       },
       {
         heading: "The Hard Problems",
@@ -171,15 +171,15 @@ The edge cases compound: an acquired employee with a legacy email, whose name ap
 
 Removing the wrong user is expensive. The employee loses access mid-workflow, files a support ticket, the license needs to be re-provisioned, and the clean-up process loses credibility. A missed removal, by contrast, costs one license seat until the next cycle.
 
-This asymmetry drove every design decision in the classification engine. The 10-step precedence chain is ordered from most conservative to least -- new users and integration accounts are excluded before anything else. The department classification framework has four layers specifically to avoid accidentally removing a revenue-facing user. Protected departments always route to Human Review regardless of activity level. And when AI is unavailable, every user is classified as Human Review rather than applying the deterministic rules without a second opinion.
+This asymmetry drove every design decision in the classification engine. The 10-step precedence chain is ordered from most conservative to least -- new users and integration accounts are excluded before anything else. The department classification framework has four layers specifically to avoid accidentally removing a revenue-facing user. Protected departments always route to Human Review regardless of activity level. And when AI is unavailable, every user is classified as Human Review rather than relying on the deterministic rules alone.
 
-The 9-category output isn't just classification granularity for its own sake -- each category maps to a different action workflow with different risk profiles. Ex-employees get a priority ticket (offboarding failure). Revenue-facing users require manager consultation. Borderline cases get human review. The system's job is to sort users into the right workflow, not to make removal decisions.
+The 9-category output isn't classification granularity for its own sake -- each category maps to a different action workflow with different risk profiles. Ex-employees get a priority ticket (offboarding failure). Revenue-facing users require manager consultation. Borderline cases get human review. The system's job is to sort users into the right workflow, not to make removal decisions.
 
 ### 3. Delta Analysis -- Inverting the Compound Review Burden
 
 Without run-over-run comparison, every clean-up cycle is a fresh review of the same users. The analyst sees 200 users, reviews all 200, removes 30, and next month sees 190 users -- including 170 they reviewed last time. The review burden compounds because there's no memory.
 
-Delta analysis inverts this. By comparing against the previous run, the system tags each user with context: "you reviewed this user last month and deferred them" or "this user was removed last month but reappeared" or "this user was active last month and is now inactive for the first time." The analyst can process persistently inactive users in seconds (they've seen the reasoning before) and focus their attention on newly inactive users and unexpected reappearances.
+Delta analysis inverts this. By comparing against the previous run, the system tags each user with context: "you reviewed this user last month and deferred them" or "this user was removed last month but reappeared" or "this user was active last month and is now inactive for the first time." The analyst can process persistently inactive users in seconds (they've seen the reasoning before) and focus attention on newly inactive users and unexpected reappearances.
 
 The sporadic access register adds another layer: users with project-based access patterns (quarter-end reconciliation, annual audits) are flagged so that their removal and reappearance isn't surprising. The flag doesn't protect them from removal -- it provides context that prevents unnecessary investigation.
 
@@ -195,19 +195,19 @@ Over time, the review surface shrinks. The first run is a full review. By the th
 | Criteria documentation | None -- tacit knowledge | Fully encoded, versioned, editable |
 | Cross-run institutional memory | None | Compounds automatically over time |
 
-The time savings are significant, but the larger impact is structural. The process is now documented, auditable, and transferable. Access criteria are explicit and versioned. Clean-up decisions are defensible in escalations because every user has a written reasoning. And the system gets better over time -- delta analysis and sporadic registers mean each run is faster and more informed than the last.`,
+The time savings matter, but the bigger shift is structural. The process is now documented, auditable, and can be handed off. Access criteria are explicit and versioned. Clean-up decisions are defensible in escalations because every user has a written reasoning. And the system compounds -- delta analysis and sporadic registers mean each cycle is faster and more targeted than the last.`,
       },
       {
         heading: "What I'd Do Differently",
-        body: `**Earlier investment in automated testing.** The classification engine has complex branching logic and interacts with multiple data sources. I validated it manually against known clean-up datasets, but a proper test suite with fixtures for each classification path and edge case would have caught regressions faster and made refactoring safer. The demo data exercises all 9 categories, but it's not a substitute for unit and integration tests.
+        body: `**Earlier investment in automated testing.** The classification engine has complex branching logic across multiple data sources. I validated it manually against known clean-up datasets, but a proper test suite with fixtures for each classification path would have caught regressions faster and made refactoring safer. The demo data exercises all 9 categories, but it's not a substitute for unit and integration tests.
 
-**More modular business rule configuration from day one.** The department classification framework, protected department lists, and activity thresholds are currently encoded in the classification engine. Extracting these into per-instance configuration earlier would have simplified the path from Phase 1 (single platform) to Phase 2 (multiple systems). The self-serve onboarding flow partially addresses this, but the core classifier still has hardcoded assumptions that will need refactoring.`,
+**More modular business rule configuration from day one.** The department classification framework, protected department lists, and activity thresholds are currently encoded in the classification engine. Extracting these into per-instance configuration earlier would have simplified the path from Phase 1 (single platform) to Phase 2 (multiple systems). The self-serve onboarding flow partially addresses this, but the core classifier still has hardcoded assumptions that need refactoring.`,
       },
       {
         heading: "What's Next",
         body: `**Phase 2 is infrastructure-ready.** The self-serve system onboarding flow -- upload a sample CSV, provide a description, review the AI-generated reasoning table, confirm -- is already built. Expanding to additional SaaS systems requires no engineering work, just an analyst with a CSV and five minutes.
 
-Beyond system expansion: automated ticket submission post-analysis (removing the copy-paste step), automated data loading from platform APIs (removing the manual CSV export step), and ultimately a fully automated end-to-end process operable by a support team member without analyst handover.`,
+Beyond that: automated ticket submission post-analysis (removing the copy-paste step), automated data loading from platform APIs (removing the manual CSV export), and eventually a fully hands-off pipeline that a support team member can operate without analyst handover.`,
       },
     ],
   },
@@ -249,7 +249,7 @@ docs/
         heading: "Problem",
         body: `The Information Systems team at a publicly traded SaaS company manages licenses across a growing portfolio of SaaS tools. Checking capacity meant logging into each system individually — different interface, different reporting format, no consistent cadence. Staying current required constant context switching with no central view to anchor it.
 
-The absence of alerting meant shortages only surfaced when a new hire couldn't be provisioned. At that point, the remediation path — identifying removable users, requesting additional licenses, waiting on vendor processing — added days of delay to onboarding. There was no utilization history, no trend data, and no data foundation for renewal conversations. Which systems were trending toward capacity? Which warranted a seat reduction at renewal? The team couldn't answer these without manual research from scratch each time.
+Without alerting, shortages only surfaced when a new hire couldn't be provisioned. At that point, the remediation path — identifying removable users, requesting additional licenses, waiting on vendor processing — added days of delay to onboarding. There was no utilization history, no trend data, and no data foundation for renewal conversations. Which systems were trending toward capacity? Which warranted a seat reduction at renewal? The team couldn't answer without manual research from scratch each time.
 
 Every shortage was reactive. Every incident was avoidable.`,
       },
@@ -261,11 +261,11 @@ Domain expertise was as important as the technical build. Which user types count
       },
       {
         heading: "Approach",
-        body: `The central architecture question before writing any SQL: how do you build something that works for five Salesforce instances today but doesn't need to be rebuilt for the next ten systems?
+        body: `The architecture question before writing any SQL: how do you build something that works for five Salesforce instances today but doesn't need to be rebuilt for the next ten systems?
 
-The answer was a **staging contract** — a binding agreement on what every data source must output before it feeds the pipeline. Eight columns, always the same, regardless of source. Because the contract is fixed, the serving layer never needs to know where data came from. Because each source has its own isolated staging view, a change in one system touches nothing else. Because the assembly query is a pure UNION ALL, adding a new system means writing one view and uncommenting one line.
+The answer was a **staging contract** — a binding agreement on what every data source must output before it feeds the pipeline. Eight columns, always the same, regardless of source. The contract is fixed, so the serving layer never needs to know where data came from. Each source has its own isolated staging view, so a change in one system touches nothing else. The assembly query is a pure UNION ALL — adding a new system means writing one view and uncommenting one line.
 
-Two other deliberate decisions shaped the build. **Pure SQL over dbt** — the team doesn't have dedicated data engineering capacity, and a framework with its own learning curve would have made this a system only one person could maintain. **Utilization pre-computed at assembly time** rather than in Looker — keeps dashboard performance predictable as the dataset grows and eliminates division-by-zero errors at the visualization layer.`,
+Two other decisions shaped the build. **Pure SQL over dbt** — the team doesn't have dedicated data engineering capacity, and a framework with its own learning curve would have made this a system only one person could maintain. **Utilization pre-computed at assembly time** rather than in Looker — keeps dashboard performance predictable as the dataset grows and eliminates division-by-zero errors at the visualization layer.`,
       },
       {
         heading: "Architecture",
@@ -366,7 +366,7 @@ Phase 2 adds a different challenge: tools without a Fivetran connector and possi
       },
       {
         heading: "The Solution — Two Layers",
-        body: `Built directly into Google Sheets using Google Apps Script — keeping the audit evidence in the same environment auditors already review, with no additional tooling to introduce or defend.
+        body: `Built directly into Google Sheets using Google Apps Script — the audit evidence stays in the same environment auditors already review. No additional tooling to introduce or defend.
 
 **Layer 1 — Row-Level Enforcement**
 Editor identity is captured automatically from their Google Workspace login and checked against the assigned reviewer for that row. Unauthorized edits are reverted immediately and the editor is notified in real time. Authorized edits are timestamped with the reviewer's email and time of sign-off.
@@ -515,11 +515,11 @@ Key design decision: the audit function is called *before* the enforcement funct
       },
       {
         heading: "What's Next",
-        body: `**Centralized audit trail.** The audit log currently lives as a tab within each review sheet. Next access review season, the script will be updated to auto-generate a dedicated Google Sheet per review cycle, stored in a designated Drive folder — centralizing the audit trail across all review sheets into a single, structured location.
+        body: `**Centralized audit trail.** The audit log currently lives as a tab within each review sheet. Next access review season, the script will auto-generate a dedicated Google Sheet per review cycle, stored in a designated Drive folder — pulling the audit trail across all review sheets into one place.
 
-**Trigger automation.** Deployment currently requires manually setting up an installable trigger per sheet. Will be exploring options to automate this step.
+**Trigger automation.** Deployment currently requires manually setting up an installable trigger per sheet. Looking into ways to automate this step.
 
-**Approver view.** The current sheet surfaces all rows to all approvers — reviewers have to locate their assigned rows manually. A cleaner solution would be a view that filters to only the rows assigned to the logged-in reviewer based on their email. This is on the roadmap pending leadership assessment of effort versus ROI — the current implementation is working well and any change needs to justify the investment.`,
+**Approver view.** Right now the sheet surfaces all rows to all approvers — reviewers have to find their assigned rows manually. A better approach would be a view filtered to just the rows assigned to the logged-in reviewer based on their email. This is on the roadmap pending leadership assessment of effort versus ROI — the current implementation works and any change needs to justify the investment.`,
       },
     ],
   },
@@ -542,7 +542,7 @@ Key design decision: the audit function is called *before* the enforcement funct
         heading: "The Problem",
         body: `Managing SaaS renewals without a documented process is manageable — until it isn't. Renewals get done, but they get done reactively, inconsistently, and without the analytical foundation that separates a transactional renewal from a strategic one.
 
-The systems governance function within a software-as-a-service organization managed SaaS renewals for a dedicated portfolio of GTM tools without a formalized process, a defined operating cadence, or structured documentation standards. As the portfolio grew in scale and complexity, the absence of standardized operating infrastructure became increasingly visible.
+The systems governance function at a SaaS company managed renewals for a portfolio of GTM tools without a formalized process, a defined operating cadence, or structured documentation standards. As the portfolio grew, the lack of standardized operating infrastructure became harder to ignore.
 
 ### Pain Points
 
@@ -550,20 +550,20 @@ The systems governance function within a software-as-a-service organization mana
 There was no consistent framework governing how renewals were planned, sequenced, or documented. Without a defined standard, the approach varied across renewals — making it difficult to ensure consistent outcomes, maintain accountability, or build on prior cycles systematically.
 
 **Compressed analysis windows**
-A thorough utilization analysis — user-level reporting, business context documentation, use case collection, capacity assessment — requires time and dedicated focus. Without a defined lead time built into the process, structured analysis was deprioritized in favor of execution on several renewals of major systems, particularly during periods of competing priorities. Rationalization opportunities — right-sizing, descoping, feature license optimization — were structurally difficult to surface as a result. Not because they didn't exist, but because there was rarely enough runway to find them.
+A thorough utilization analysis — user-level reporting, business context documentation, use case collection, capacity assessment — requires time and dedicated focus. Without a defined lead time built into the process, structured analysis got deprioritized in favor of execution on several major renewals, particularly when competing priorities stacked up. Rationalization opportunities — right-sizing, descoping, feature license optimization — were structurally difficult to surface. Not because they didn't exist, but because there was rarely enough runway to find them.
 
 **No consistent stakeholder loop**
-Procurement, budget-owning departments, finance, and vendors were engaged reactively rather than through a structured communication sequence. This created friction and misaligned expectations at multiple points in the cycle — particularly in the commercial and approval stages where timing and clarity matter most.
+Procurement, budget-owning departments, finance, and vendors were engaged reactively — not through any structured communication sequence. That created friction and misaligned expectations at multiple points in the cycle — particularly in the commercial and approval stages where timing and clarity matter most.
 
 **No structured record of renewal decisions**
 Renewal outcomes were executed without a documented record of the analysis, recommendations, and decisions that produced them. If a decision was later questioned — on scope, pricing, or vendor terms — there was no structured artifact to reference.
 
 **Implicit process as a single point of failure**
-The renewal process relied on institutional knowledge passed informally without standardization. It couldn't be meaningfully delegated, systematically improved, or transferred intact. The function was dependent on continuity of individuals rather than on a repeatable, documented system.
+The renewal process relied on institutional knowledge passed informally. It couldn't be meaningfully delegated, improved systematically, or transferred intact. The function depended on continuity of individuals, not a repeatable, documented system.
 
 ---
 
-The cost of this state was not dramatic — it was cumulative. Renewals got done. But strategic decisions were missed. Friction accumulated. And the function stayed dependent on tribal knowledge rather than growing into something the team could operate and build on.
+The cost wasn't dramatic — it was cumulative. Renewals got done. But strategic decisions were missed, friction accumulated, and the function stayed stuck on tribal knowledge instead of growing into something the team could operate and build on.
 
 > **Key Points**
 > - No standardized operating procedure across a 60+ system portfolio
@@ -573,7 +573,7 @@ The cost of this state was not dramatic — it was cumulative. Renewals got done
       },
       {
         heading: "Role and Scope",
-        body: `I designed and operationalized the end-to-end SaaS renewal function within an internal technology operations team at a software-as-a-service organization — formalizing and documenting what had previously been an informal, undocumented process with no standardized framework to build from.
+        body: `I designed and operationalized the end-to-end SaaS renewal function within an internal technology operations team at a SaaS company — formalizing what had been an informal, undocumented process with no standardized framework to build from.
 
 | | |
 |---|---|
@@ -588,7 +588,7 @@ The cost of this state was not dramatic — it was cumulative. Renewals got done
       },
       {
         heading: "What I Built",
-        body: `The work produced four interconnected layers — each addressing a distinct gap in how the function planned, executed, and tracked renewals.
+        body: `Four interconnected layers — each addressing a different gap in how the function planned, executed, and tracked renewals.
 
 ### Layer 1 — The Renewal Workflow
 
@@ -600,11 +600,11 @@ The renewal cycle triggers at 70 days. The expansion cycle triggers when a produ
 
 ### Layer 2 — The Tooling Layer
 
-A Systems Governance portal was built to serve as the operational home for the function. Every renewal is logged as a ticket at initiation. Every expansion request is submitted by product managers through the portal directly. The Renewal Brief is attached to every ticket — keeping all context collocated with the work item. The portal replaced ad-hoc tracking with a structured, auditable record of every active and historical renewal and expansion in one place.
+I built a Systems Governance portal as the operational home for the function. Every renewal is logged as a ticket at initiation. Every expansion request is submitted by product managers through the portal directly. The Renewal Brief is attached to every ticket — keeping all context collocated with the work item. The portal replaced ad-hoc tracking with a structured, auditable record of every active and historical renewal and expansion in one place.
 
 ### Layer 3 — The Analytical Output
 
-The structured analysis phase — protected by the 70-day lead time — is the mechanism through which strategic decisions become possible. Several renewals executed under the process produced rationalization and right-sizing outcomes that would have been difficult to surface under the previous ad-hoc approach, simply because there was now enough time and structure to do the analysis properly.
+The structured analysis phase — protected by the 70-day lead time — is where strategic decisions actually become possible. Several renewals run under this process produced rationalization and right-sizing outcomes that would have been hard to surface before, simply because there was now enough time and structure to do the analysis properly.
 
 The Renewal Brief formalizes this output into a consistent artifact at the close of every cycle:
 
@@ -640,7 +640,7 @@ Dashboard summary tiles surface: total systems count, renewals due this month, a
       },
       {
         heading: "Outcomes",
-        body: `The work produced outcomes across three distinct dimensions.
+        body: `Outcomes across three dimensions.
 
 | Dimension | Outcome |
 |---|---|
@@ -655,16 +655,16 @@ Dashboard summary tiles surface: total systems count, renewals due this month, a
       },
       {
         heading: "Design Decisions Worth Calling Out",
-        body: `Three deliberate choices shaped how this process was built — and why it holds up under operational pressure.
+        body: `Three choices shaped how this process was built — and why it holds up under pressure.
 
 **The analysis phase is mandatory, not optional**
-In an ad-hoc renewal process, structured analysis is the first thing dropped when timelines compress. A proper utilization review — user-level usage data, business context documentation, use case collection — requires dedicated time that a reactive approach rarely protects. The decision to mandate the analysis phase as a fixed, sequenced step inside a 70-day window was deliberate: the only way to consistently produce it was to make skipping it structurally difficult.
+In an ad-hoc renewal process, structured analysis is the first thing dropped when timelines compress. A proper utilization review — user-level usage data, business context documentation, use case collection — requires dedicated time that a reactive approach rarely protects. Mandating the analysis phase as a fixed, sequenced step inside a 70-day window was the key call: the only way to consistently produce it was to make skipping it structurally difficult.
 
 **The portal as the operational home, not a tracking spreadsheet**
-A shared spreadsheet could have tracked renewals. The decision to build a structured portal went further — creating a formal intake system with defined workflows for both internal logging and external stakeholder requests. Every renewal and expansion has a ticket, a brief, and a documented record. The portal made the process auditable by default, not by effort.
+A shared spreadsheet could have tracked renewals. Building a structured portal went further — creating a formal intake system with defined workflows for both internal logging and external stakeholder requests. Every renewal and expansion has a ticket, a brief, and a documented record. The portal made the process auditable by default, not by effort.
 
 **One input layer — everything else derives from it**
-The contracts source of truth is built around a single input tab. One entry point for any change — the rest of the model, the connected data warehouse, and the Looker dashboard update automatically. The alternative — maintaining data in multiple places — produces version drift and erodes trust in the numbers over time. Centralizing input was a deliberate architectural decision, not a convenience.
+The contracts source of truth is built around a single input tab. One entry point for any change — the rest of the model, the connected data warehouse, and the Looker dashboard update automatically. The alternative — maintaining data in multiple places — produces version drift and erodes trust in the numbers over time. Centralizing input was an architectural decision, not a convenience.
 
 > **Key Points**
 > - Analysis phase is a fixed process gate — structurally protected, not effort-dependent
@@ -673,7 +673,7 @@ The contracts source of truth is built around a single input tab. One entry poin
       },
       {
         heading: "What's Next",
-        body: `The process is established and operational — but the current implementation still relies on a distributed set of tools. The renewal brief lives in a document. The contracts source of truth lives in a spreadsheet. The dashboard lives in a BI tool. The portal lives in a project management platform. Each works well individually; together, they require context switching and manual upkeep that compounds across a portfolio of over 60 systems.
+        body: `The process is established and operational — but the current implementation still relies on a distributed set of tools. The renewal brief lives in a document. The contracts source of truth lives in a spreadsheet. The dashboard lives in a BI tool. The portal lives in a project management platform. Each works well on its own; together, they require context switching and manual upkeep that compounds across 60+ systems.
 
 ### The Next Evolution — A Unified Renewal System
 
@@ -690,7 +690,7 @@ When a system enters the renewal window, the tool surfaces it as an active recor
 
 ### What That Unlocks
 
-With operational overhead removed, the function's analytical capacity shifts. The focus moves from keeping the process running to extracting more value from it — deeper SKU-level optimization, feature license rationalization, and more sophisticated commercial positioning at renewal. That is where the next layer of impact lives.
+With the operational overhead removed, analytical capacity opens up. The focus shifts from keeping the process running to extracting more value from it — deeper SKU-level optimization, feature license rationalization, and sharper commercial positioning at renewal. That's where the next layer of impact is.
 
 > **Key Points**
 > - Current implementation is functional but distributed — context switching and manual upkeep across 60+ renewals is the remaining friction
