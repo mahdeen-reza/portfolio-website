@@ -17,7 +17,18 @@ export interface Project {
   screenshot?: string;
   role: string;
   status: string;
+  techStack: string[];
+  fileTree?: string;
   sections: CaseStudySection[];
+}
+
+export function toAnchorId(heading: string): string {
+  return heading
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, "")
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-")
+    .trim();
 }
 
 export const projects: Project[] = [
@@ -35,6 +46,36 @@ export const projects: Project[] = [
     screenshot: "/projects/license-cleanup-agent.png",
     role: "Solo builder — architecture through deployment",
     status: "Phase 1 complete, Phase 2 infrastructure ready",
+    techStack: [
+      "TypeScript",
+      "Node.js",
+      "Express 5",
+      "React 19",
+      "Vite",
+      "PostgreSQL 15",
+      "Prisma ORM",
+      "Anthropic Claude API",
+      "Docker",
+      "ESLint",
+    ],
+    fileTree: `src/
+├── core/
+│   ├── classifier.ts
+│   ├── deltaComparison.ts
+│   ├── emailNormalizer.ts
+│   └── hrEnricher.ts
+├── intelligence/
+│   ├── foundationalKnowledge.ts
+│   └── reasoningEngine.ts
+├── routes/
+├── middleware/
+└── server.ts
+frontend/
+└── src/
+    ├── components/
+    └── App.tsx
+prisma/
+└── schema.prisma`,
     sections: [
       {
         heading: "The Problem",
@@ -185,6 +226,24 @@ Beyond system expansion: automated ticket submission post-analysis (removing the
     screenshot: "/projects/saas-license-monitor.png",
     role: "Sole designer and builder — architecture, SQL, LookML, alerting, documentation",
     status: "Phase 1 live · Phase 2 designed and documented",
+    techStack: [
+      "SQL",
+      "Google BigQuery",
+      "Fivetran",
+      "Looker",
+      "LookML",
+      "Google Cloud Platform",
+    ],
+    fileTree: `sql/
+├── assembly_query.sql
+└── stg_salesforce.sql
+lookml/
+├── is_license_model.model.lkml
+└── license_inventory.view.lkml
+architecture/
+└── pipeline_architecture.svg
+docs/
+└── staging_contract.md`,
     sections: [
       {
         heading: "Problem",
@@ -281,6 +340,17 @@ Phase 2 adds a different challenge: tools without a Fivetran connector and possi
     github: "https://github.com/mahdeen-reza/systems-governance-toolkit",
     role: "Compliance Engineer",
     status: "Live — deployed across access review cycles",
+    techStack: [
+      "JavaScript",
+      "Google Apps Script",
+      "Google Sheets",
+      "Google Workspace",
+    ],
+    fileTree: `sox-access-review-controls/
+├── scripts/
+│   └── access_review.gs
+└── docs/
+    └── control_design.md`,
     sections: [
       {
         heading: "Background",
@@ -462,6 +532,11 @@ Key design decision: the audit function is called *before* the enforcement funct
     tags: ["Process Design", "Operations", "Governance"],
     role: "Sole Designer and Implementer",
     status: "Ongoing",
+    techStack: [
+      "Process Design",
+      "Operations",
+      "Governance",
+    ],
     sections: [
       {
         heading: "The Problem",
