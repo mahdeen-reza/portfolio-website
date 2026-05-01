@@ -45,6 +45,15 @@ html {
   }
 }
 
+@keyframes bounce-arrow {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(4px);
+  }
+}
+
 /* ── Global Styles ── */
 html {
   scroll-behavior: smooth;
@@ -89,9 +98,15 @@ body {
 /* ── Case Study Prose ── */
 .prose-case-study {
   font-family: var(--font-body);
-  font-size: 20px;
+  font-size: 16px;
   line-height: 1.7;
   color: var(--color-charcoal);
+}
+
+@media (min-width: 768px) {
+  .prose-case-study {
+    font-size: 20px;
+  }
 }
 
 .prose-case-study p {
