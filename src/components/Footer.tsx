@@ -167,7 +167,7 @@ export default function Footer() {
           {/* Right column — nav tabs + socials */}
           <motion.div
             variants={fadeUpSubtle}
-            className="grid grid-cols-2 gap-4"
+            className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4"
           >
             {/* Nav tabs */}
             <div className="flex flex-col gap-3">

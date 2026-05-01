@@ -139,11 +139,11 @@ export default function About() {
               {/* Info containers — grid, full width, equal height */}
               <div className="grid grid-cols-1 sm:grid-cols-[3fr_1fr] gap-4">
                 {/* Hobbies — 3-column list */}
-                <div className="bg-dark/[0.03] border border-dark/10 rounded-xl pl-12 pr-6 py-6">
+                <div className="bg-dark/[0.03] border border-dark/10 rounded-xl pl-6 sm:pl-12 pr-6 py-6">
                   <h3 className="font-display font-bold text-[15px] uppercase tracking-[0.06em] text-dark mb-5">
                     Hobbies &amp; Interests
                   </h3>
-                  <ul className="grid grid-cols-3 gap-x-10 gap-y-2.5">
+                  <ul className="grid grid-cols-2 gap-x-6 sm:grid-cols-3 sm:gap-x-10 gap-y-2.5">
                     {HOBBIES.map((item) => (
                       <li
                         key={item.label}
