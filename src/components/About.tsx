@@ -84,10 +84,10 @@ export default function About() {
               className="flex flex-col will-change-transform"
             >
               <Image
-                src="/portrait.jpg"
+                src="/portrait-final.jpg"
                 alt="Mahdeen Reza"
-                width={600}
-                height={800}
+                width={1200}
+                height={1200}
                 className="w-full h-auto object-cover"
                 sizes="(max-width: 1024px) 100vw, 30vw"
               />
@@ -119,16 +119,17 @@ export default function About() {
             <motion.div variants={fadeUpFast} className="flex flex-col will-change-transform">
               {/* Body text */}
               <div className="mb-8 space-y-4">
-                <p className="font-body text-[23px] leading-[1.7] text-charcoal">
-                  I&apos;m Mahdeen Reza &mdash; a Systems Governance Analyst at
-                  Lightspeed Commerce, building the governance function from
-                  scratch. Economics background from McGill, started in SalesOps.
+                <p className="font-body text-[17px] md:text-[23px] leading-[1.7] text-charcoal">
+                  Economics and Political Science at McGill &mdash; into Sales
+                  Operations &mdash; now building at the intersection of
+                  Business, GTM Systems, AI, and Data. Unconventional entry into
+                  tech, intentional in direction.
                 </p>
-                <p className="font-body text-[23px] leading-[1.7] text-charcoal">
-                  Today I build the infrastructure that keeps organizations
-                  running &mdash; from AI-powered license analysis to SOX-compliant
-                  audit frameworks. Managing a 60+ system portfolio, turning
-                  manual processes into automated workflows.
+                <p className="font-body text-[17px] md:text-[23px] leading-[1.7] text-charcoal">
+                  A business-first foundation brings a different angle to
+                  systems thinking &mdash; one that connects the operational and
+                  the technical. This site documents the work as it&apos;s being
+                  built.
                 </p>
               </div>
 

@@ -11,13 +11,13 @@ import {
 } from "@/lib/animations";
 
 const NAV_LINKS = [
-  { label: "Projects", href: "/projects" },
+  { label: "Projects", href: "/#projects" },
   { label: "Skills", href: "/#skills" },
   { label: "About", href: "/#about" },
 ];
 
 const SOCIAL_LINKS = [
-  { label: "LinkedIn", href: "https://linkedin.com/in/mahdeen-reza" },
+  { label: "LinkedIn", href: "https://www.linkedin.com/in/mahdeenreza/" },
   { label: "GitHub", href: "https://github.com/mahdeen-reza" },
 ];
 
@@ -150,7 +150,7 @@ export default function Footer() {
             </motion.h2>
             <motion.p
               variants={fadeUpSubtle}
-              className="font-body text-[23px] leading-[1.7] text-white/70 mb-6"
+              className="font-body text-[17px] md:text-[23px] leading-[1.7] text-white/70 mb-6"
             >
               Open to conversations about AI, SaaS, Product, and the future of
               operations work.
@@ -158,7 +158,7 @@ export default function Footer() {
             <motion.a
               variants={fadeUpSubtle}
               href="mailto:mahdeen.amin@gmail.com"
-              className="font-body text-[26px] text-terracotta transition-colors duration-200 hover:text-terracotta-hover"
+              className="font-body text-[20px] md:text-[26px] text-terracotta transition-colors duration-200 hover:text-terracotta-hover"
             >
               mahdeen.amin@gmail.com
             </motion.a>
@@ -175,7 +175,7 @@ export default function Footer() {
                 <Link
                   key={link.label}
                   href={link.href}
-                  className="font-body text-[23px] text-white/70 transition-colors duration-200 hover:text-terracotta whitespace-nowrap select-none"
+                  className="font-body text-[17px] md:text-[23px] text-white/70 transition-colors duration-200 hover:text-terracotta whitespace-nowrap select-none"
                 >
                   {link.label}
                 </Link>
@@ -190,7 +190,7 @@ export default function Footer() {
                   href={link.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="font-body text-[23px] text-terracotta transition-colors duration-200 hover:text-terracotta-hover whitespace-nowrap select-none"
+                  className="font-body text-[17px] md:text-[23px] text-terracotta transition-colors duration-200 hover:text-terracotta-hover whitespace-nowrap select-none"
                 >
                   {link.label}
                   <ExternalLinkIcon />
@@ -208,12 +208,15 @@ export default function Footer() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
-          className="flex flex-col sm:flex-row items-center justify-between gap-2"
+          className="grid grid-cols-1 sm:grid-cols-3 items-center gap-2 text-center sm:text-left"
         >
           <p className="font-body text-xs text-white/70">
             &copy; {new Date().getFullYear()} Mahdeen Reza
           </p>
-          <p className="font-body text-[23px] text-white/70">
+          <p className="font-body text-xs text-white/70 sm:text-center">
+            Last updated May 2026
+          </p>
+          <p className="font-body text-[16px] md:text-[23px] text-white/70 sm:text-right">
             {timeParts && <AnimatedClock timeParts={timeParts} />}
           </p>
         </motion.div>

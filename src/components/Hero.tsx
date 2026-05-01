@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import Link from "next/link";
 import { motion } from "motion/react";
 import { EASE_OUT_EXPO } from "@/lib/animations";
 import { usePreloaderDone } from "@/lib/usePreloaderDone";
@@ -23,6 +22,7 @@ export default function Hero() {
 
   return (
     <section
+      id="hero"
       className="relative min-h-[calc(100vh-64px)] bg-cream overflow-hidden"
     >
       <div className="max-w-[1600px] mx-auto px-6 md:px-12 lg:px-20 pt-16 md:pt-24 lg:pt-12 pb-20 md:pb-28 lg:pb-20 flex flex-col min-h-[calc(100vh-64px)]">
@@ -75,7 +75,7 @@ export default function Hero() {
               }}
             >
               <span
-                className="font-body text-[20px] text-muted/60 tracking-wide"
+                className="font-body text-[22px] text-muted/60 tracking-wide"
                 style={{
                   display: "inline-block",
                   animation: `float-wave 6s ease-in-out ${tag.delay}s infinite`,
@@ -104,11 +104,11 @@ export default function Hero() {
                 ease: EASE_OUT_EXPO,
                 delay: 0.5,
               }}
-              className="font-body text-[23px] leading-[1.7] text-muted max-w-md lg:max-w-[50%] mx-auto lg:mx-0"
+              className="font-body text-[17px] md:text-[23px] leading-[1.7] text-muted max-w-md lg:max-w-[55%] mx-auto lg:mx-0"
             >
               <span className="text-charcoal font-semibold">Systems Governance Analyst at Lightspeed Commerce — building the function from scratch.</span>{" "}
-              Scope spans SaaS management, data and compliance infrastructure, workflow automation, and shipping AI-powered internal tooling. Exploring what becomes possible when you put AI inside the systems layer.{" "}
-              <span className="text-terracotta-dark font-semibold">Documenting the work in real time.</span>
+              Scope spans SaaS management, data infrastructure and analysis, compliance controls, workflow automation, and AI-powered internal tooling. Exploring what becomes possible when you put AI inside the systems layer.{" "}
+              <span className="text-terracotta-dark font-semibold">The work, as it's being built.</span>
             </motion.p>
 
             <motion.div
@@ -125,12 +125,12 @@ export default function Hero() {
               }}
               className="flex justify-center lg:justify-end lg:shrink-0"
             >
-              <Link
-                href="/projects"
-                className="bg-terracotta text-cream font-body text-[19px] font-medium tracking-[0.04em] px-5.5 py-2.5 rounded-lg transition-colors duration-200 hover:bg-terracotta-dark hover:text-cream select-none"
+              <button
+                onClick={() => document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" })}
+                className="bg-terracotta text-cream font-body text-[19px] font-semibold tracking-[0.04em] px-5.5 py-2.5 rounded-lg transition-colors duration-200 hover:bg-terracotta-dark hover:text-cream select-none cursor-pointer"
               >
-                View projects
-              </Link>
+                <span className="inline-block" style={{ animation: "bounce-arrow 1.5s ease-in-out infinite" }}>↓</span>{" "}Work
+              </button>
             </motion.div>
         </div>
       </div>
