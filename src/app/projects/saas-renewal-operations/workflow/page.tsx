@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import Markdown from "@/components/Markdown";
 
 export const metadata: Metadata = {
-  title: "Workflow Documentation: SaaS Renewal & Expansion | Mahdeen Reza",
+  title: "Process Map and Workflow: SaaS Renewal & Expansion | Mahdeen Reza",
   description:
     "Comprehensive process reference for SaaS tool renewals and seat expansions — covering initiation through close-out.",
 };
@@ -194,21 +194,21 @@ export default function WorkflowPage() {
 
           {/* Title */}
           <h1 className="font-display font-bold text-[clamp(38px,5.5vw,72px)] uppercase tracking-[-0.03em] text-terracotta -mb-1">
-            Workflow
+            Process Map and Workflow
           </h1>
           <p className="font-display font-bold text-[clamp(26px,3.5vw,34px)] tracking-[-0.02em] text-dark mb-4">
             SaaS Renewal & Expansion Documentation
           </p>
 
           {/* Subtitle */}
-          <p className="font-body text-[20px] leading-[1.7] text-charcoal/60 mb-8">
+          <p className="font-body text-[16px] md:text-[20px] leading-[1.7] text-charcoal/60 mb-8">
             Function: Technology Operations — Systems Governance | Portfolio: GTM
             SaaS Portfolio | Version: 1.0
           </p>
 
           {/* Intro */}
           <div className="pb-8 mb-12 border-b border-dark/10">
-            <p className="font-body text-[20px] leading-[1.7] text-charcoal">
+            <p className="font-body text-[16px] md:text-[20px] leading-[1.7] text-charcoal">
               Comprehensive process reference for SaaS tool renewals and seat
               expansions — covering initiation through close-out, including
               decision logic and swim lane ownership at every stage. The Systems
@@ -218,8 +218,19 @@ export default function WorkflowPage() {
             </p>
           </div>
 
+          {/* Process maps */}
+          <div className="mb-12">
+            <h2 className="font-display font-bold text-[clamp(26px,3.5vw,34px)] tracking-[-0.02em] text-dark mb-6">
+              Process Maps
+            </h2>
+            <p className="font-body text-[15px] font-semibold text-dark mb-2">Tool Renewal Process Map</p>
+            <Markdown content={"![Tool Renewal Process Map](/projects/saas-renewal-process-map.svg)"} />
+            <p className="font-body text-[15px] font-semibold text-dark mb-2">Tool Expansion Process Map</p>
+            <Markdown content={"![Tool Expansion Process Map](/projects/saas-expansion-process-map.svg)"} />
+          </div>
+
           {/* Content sections */}
-          <div className="flex flex-col gap-16 max-w-[900px]">
+          <div className="flex flex-col gap-16">
             {sections.map((section) => (
               <section key={section.heading}>
                 <h2 className="font-display font-bold text-[clamp(26px,3.5vw,34px)] tracking-[-0.02em] text-dark mb-6">

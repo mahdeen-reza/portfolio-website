@@ -37,19 +37,19 @@ export default async function CaseStudyPage({
   return (
     <main className="pt-16 bg-warm-sand">
       <article id="case-study" className="bg-warm-sand">
-        <div className="max-w-[1600px] mx-auto px-6 md:px-12 lg:px-20 w-full">
+        <div className={`${project.wideLayout ? "max-w-[1800px]" : "max-w-[1600px]"} mx-auto px-6 md:px-12 lg:px-20 w-full`}>
           {/* Compressed header zone — frozen on desktop */}
           <StickyHeader>
             {/* Back link */}
             <Link
-              href="/"
+              href="/?projects=open"
               className="inline-block font-body text-[13px] font-medium text-terracotta transition-colors duration-200 hover:text-terracotta-dark mb-2"
             >
-              &larr; Back to home
+              &larr; Back to projects
             </Link>
 
             {/* Combined heading */}
-            <h1 className="font-display font-bold text-[clamp(38px,5.5vw,72px)] uppercase tracking-[-0.03em] mb-2">
+            <h1 className={`font-display font-bold ${project.wideLayout ? "text-[clamp(34px,4.5vw,60px)]" : "text-[clamp(38px,5.5vw,72px)]"} uppercase tracking-[-0.03em] mb-2`}>
               <span className="text-terracotta">Case Study:</span>{" "}
               <span className="text-dark">{project.name}</span>
             </h1>
@@ -60,7 +60,7 @@ export default async function CaseStudyPage({
                 <span className="block font-body text-[11px] uppercase tracking-[0.1em] text-muted mb-0.5">
                   Role
                 </span>
-                <span className="font-body text-[18px] text-dark">
+                <span className="font-body text-[15px] md:text-[18px] text-dark">
                   {project.role}
                 </span>
               </div>
@@ -68,18 +68,36 @@ export default async function CaseStudyPage({
                 <span className="block font-body text-[11px] uppercase tracking-[0.1em] text-muted mb-0.5">
                   Status
                 </span>
-                <span className="font-body text-[18px] text-dark">
+                <span className="font-body text-[15px] md:text-[18px] text-dark">
                   {project.status}
                 </span>
               </div>
-              {(project.github || project.demo) && (
+              <div>
+                <span className="block font-body text-[11px] uppercase tracking-[0.1em] text-muted mb-0.5">
+                  Last Updated
+                </span>
+                <span className="font-body text-[15px] md:text-[18px] text-dark">
+                  {project.lastUpdated}
+                </span>
+              </div>
+              {project.builtWith && (
+                <div>
+                  <span className="block font-body text-[11px] uppercase tracking-[0.1em] text-muted mb-0.5">
+                    Built With
+                  </span>
+                  <span className="font-body text-[15px] md:text-[18px] text-dark">
+                    {project.builtWith}
+                  </span>
+                </div>
+              )}
+              {(project.github || project.demo || project.processMap) && (
                 <div className="flex items-end gap-4 ml-auto">
                   {project.github && (
                     <Link
                       href={project.github}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-block font-body text-[20px] font-medium text-terracotta transition-all duration-200 hover:text-terracotta-dark hover:scale-105 origin-right"
+                      className="inline-block font-body text-[16px] md:text-[20px] font-medium text-terracotta transition-all duration-200 hover:text-terracotta-dark hover:scale-105 origin-right"
                     >
                       GitHub &rarr;
                     </Link>
@@ -89,9 +107,17 @@ export default async function CaseStudyPage({
                       href={project.demo}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-block font-body text-[20px] font-medium text-terracotta transition-all duration-200 hover:text-terracotta-dark hover:scale-105 origin-right"
+                      className="inline-block font-body text-[16px] md:text-[20px] font-medium text-terracotta transition-all duration-200 hover:text-terracotta-dark hover:scale-105 origin-right"
                     >
                       Live demo &rarr;
+                    </Link>
+                  )}
+                  {project.processMap && (
+                    <Link
+                      href={project.processMap}
+                      className="inline-block font-body text-[16px] md:text-[20px] font-medium text-terracotta transition-all duration-200 hover:text-terracotta-dark hover:scale-105 origin-right"
+                    >
+                      Process map and Workflow &rarr;
                     </Link>
                   )}
                 </div>
@@ -115,6 +141,11 @@ export default async function CaseStudyPage({
                   </span>
                 ))}
               </div>
+              {project.techStackFooter && (
+                <p className="font-body text-[13px] italic text-muted mt-3">
+                  {project.techStackFooter}
+                </p>
+              )}
             </div>
             <div>
               <h4 className="font-body text-[11px] uppercase tracking-[0.1em] text-muted mb-3">
@@ -149,6 +180,7 @@ export default async function CaseStudyPage({
                   techStack={project.techStack}
                   sections={project.sections}
                   fileTree={project.fileTree}
+                  techStackFooter={project.techStackFooter}
                 />
               </div>
             </aside>
