@@ -454,7 +454,7 @@ export default function Skills() {
                         aria-hidden="true"
                       />
                     </span>
-                    <span className="font-body text-[17px] font-medium text-charcoal leading-[1.6]">
+                    <span className="font-body text-[15px] sm:text-[17px] font-medium text-charcoal leading-[1.6]">
                       {skill.name}
                     </span>
                   </div>

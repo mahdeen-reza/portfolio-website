@@ -58,7 +58,7 @@ function ZoomCard({ project, container }: { project: Project; container: React.R
             <h3 className="font-display font-semibold text-[clamp(24px,3vw,34px)] tracking-[-0.02em] text-dark">
               {project.name}
             </h3>
-            <p className="font-body text-[20px] leading-[1.6] text-muted">
+            <p className="font-body text-[16px] md:text-[20px] leading-[1.6] text-muted">
               {project.description}
             </p>
             <div className="flex flex-wrap gap-2 mt-1">

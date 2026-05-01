@@ -29,12 +29,12 @@ export default function ProjectCard({ project }: { project: Project }) {
             <h3 className="font-display font-semibold text-[clamp(24px,3vw,34px)] tracking-[-0.02em] text-dark">
               {project.name}
             </h3>
-            <p className="font-body text-[20px] leading-[1.6] text-muted">
+            <p className="font-body text-[16px] md:text-[20px] leading-[1.6] text-muted">
               {project.description}
             </p>
             {project.impact && (
-              <p className="font-body text-[14px] leading-[1.5] text-muted">
-                {project.impact}
+              <p className="font-body text-[17px] leading-[1.5] text-terracotta">
+                Impact: {project.impact}
               </p>
             )}
             <div className="flex flex-wrap gap-2 mt-1">
