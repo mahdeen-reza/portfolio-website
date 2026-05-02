@@ -92,27 +92,11 @@ export default function About() {
                 sizes="(max-width: 1024px) 100vw, 30vw"
               />
               <div className="flex-1" />
-              <a
-                href="/resume.pdf"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 w-full bg-terracotta text-cream font-body text-[16px] font-medium tracking-[0.04em] px-6 py-3 rounded-lg transition-colors duration-200 hover:bg-terracotta-dark mt-4 select-none"
+              <span
+                className="inline-flex items-center justify-center w-full bg-terracotta/50 text-cream font-body text-[16px] font-medium tracking-[0.04em] px-6 py-3 rounded-lg mt-4 select-none cursor-default"
               >
-                Download Resume
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  aria-hidden="true"
-                >
-                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3" />
-                </svg>
-              </a>
+                COMING SOON
+              </span>
             </motion.div>
 
             {/* ── Right column: text + containers ── */}
