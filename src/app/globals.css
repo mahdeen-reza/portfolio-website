@@ -220,6 +220,15 @@ body {
   vertical-align: top;
 }
 
+@media (max-width: 767px) {
+  .prose-case-study table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    font-size: 14px;
+  }
+}
+
 .prose-case-study tbody tr:last-child td {
   border-bottom: none;
 }

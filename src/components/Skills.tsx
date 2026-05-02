@@ -443,7 +443,7 @@ export default function Skills() {
                 {container.skills.map((skill) => (
                   <div
                     key={skill.name}
-                    className="flex items-center gap-2.5 px-2 py-1 -mx-2 rounded-md transition-transform duration-200 hover:scale-[1.12] origin-left cursor-default"
+                    className="flex items-center gap-2.5 px-2 py-1 -mx-2 rounded-md transition-transform duration-200 hover:scale-[1.04] sm:hover:scale-[1.12] origin-left cursor-default"
                   >
                     <span
                       className="shrink-0"

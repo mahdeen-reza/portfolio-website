@@ -152,12 +152,12 @@ export default async function CaseStudyPage({
                 Contents
               </h4>
               <nav aria-label="Table of contents">
-                <ul className="space-y-1">
+                <ul className="space-y-0">
                   {project.sections.map((section, i) => (
                     <li key={section.heading}>
                       <a
                         href={`#${toAnchorId(section.heading)}`}
-                        className="flex items-center gap-2 font-body text-[13px] text-muted hover:text-dark transition-colors duration-200"
+                        className="flex items-center gap-2 font-body text-[13px] text-muted hover:text-dark transition-colors duration-200 py-1.5"
                       >
                         <span className="text-muted/50 font-mono text-[11px]">
                           {String(i + 1).padStart(2, "0")}
