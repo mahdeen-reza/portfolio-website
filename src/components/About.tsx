@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import Image from "next/image";
 import {
   motion,
@@ -35,6 +35,7 @@ const CAREER_PATHS = [
 export default function About() {
   const sectionRef = useRef<HTMLElement>(null);
   const prefersReducedMotion = useReducedMotion();
+  const [showComingSoon, setShowComingSoon] = useState(false);
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -92,11 +93,36 @@ export default function About() {
                 sizes="(max-width: 1024px) 100vw, 30vw"
               />
               <div className="flex-1" />
-              <span
-                className="inline-flex items-center justify-center w-full bg-terracotta/50 text-cream font-body text-[16px] font-medium tracking-[0.04em] px-6 py-3 rounded-lg mt-4 select-none cursor-default"
+              <button
+                type="button"
+                onClick={() => setShowComingSoon(true)}
+                className="inline-flex items-center justify-center gap-2 w-full bg-terracotta text-cream font-body text-[16px] font-medium tracking-[0.04em] px-6 py-3 rounded-lg transition-colors duration-200 hover:bg-terracotta-dark mt-4 select-none"
               >
-                COMING SOON
-              </span>
+                Download Resume
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3" />
+                </svg>
+              </button>
+              {showComingSoon && (
+                <motion.div
+                  initial={{ opacity: 0, y: -4 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.25 }}
+                  className="mt-2 rounded-lg bg-dark/90 text-cream font-body text-[13px] tracking-[0.06em] text-center py-2 px-4"
+                >
+                  COMING SOON
+                </motion.div>
+              )}
             </motion.div>
 
             {/* ── Right column: text + containers ── */}
