@@ -153,7 +153,7 @@ export default function ProjectsOverlay() {
             aria-label="All projects"
           >
             {/* Sticky header */}
-            <div className="sticky top-0 z-10 bg-warm-sand px-8 md:px-12 pt-8 pb-6 border-b border-dark/5 relative">
+            <div className="sticky top-0 z-10 bg-warm-sand px-5 md:px-12 pt-8 pb-6 border-b border-dark/5 relative">
               <button
                 ref={closeButtonRef}
                 onClick={close}
@@ -171,7 +171,7 @@ export default function ProjectsOverlay() {
             </div>
 
             {/* Scrollable card list */}
-            <div ref={scrollRef} className="flex-1 overflow-y-auto px-8 md:px-12 pt-8 pb-[50vh]">
+            <div ref={scrollRef} className="flex-1 overflow-y-auto px-5 md:px-12 pt-6 pb-[30vh]">
               <motion.div
                 initial="hidden"
                 animate="visible"

@@ -55,7 +55,7 @@ export default async function CaseStudyPage({
             </h1>
 
             {/* Metadata bar */}
-            <div className="flex flex-wrap items-end gap-x-6 sm:gap-x-8 gap-y-3 pb-4 mb-0 border-b border-dark/10">
+            <div className="flex flex-wrap items-end gap-x-4 sm:gap-x-8 gap-y-3 pb-4 mb-0 border-b border-dark/10">
               <div>
                 <span className="block font-body text-[11px] uppercase tracking-[0.1em] text-muted mb-0.5">
                   Role

@@ -434,7 +434,7 @@ export default function Skills() {
             <motion.div
               key={container.header}
               variants={fadeUpFast}
-              className="bg-warm-sand border border-dark/12 rounded-xl py-6 px-10 md:py-8 md:px-14 transition-all duration-300 hover:bg-sand-light/60 hover:backdrop-blur-lg hover:border-white/50 hover:shadow-2xl hover:shadow-dark/8 hover:-translate-y-2 will-change-transform"
+              className="bg-warm-sand border border-dark/12 rounded-xl py-5 px-5 sm:px-10 md:py-8 md:px-14 transition-all duration-300 hover:bg-sand-light/60 hover:backdrop-blur-lg hover:border-white/50 hover:shadow-2xl hover:shadow-dark/8 hover:-translate-y-2 will-change-transform"
             >
               <h3 className="font-display font-bold text-[clamp(20px,2.5vw,28px)] tracking-[-0.02em] text-terracotta mb-4">
                 {container.header}

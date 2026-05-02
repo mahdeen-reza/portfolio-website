@@ -125,7 +125,13 @@ export default function Navbar() {
         {/* Logo */}
         <Link
           href="/"
-          className={`justify-self-start rounded-none px-4.5 py-2 font-display font-semibold text-[18px] tracking-[-0.02em] transition-colors duration-500 select-none ${logoClasses}`}
+          onClick={(e) => {
+            if (window.location.pathname === "/") {
+              e.preventDefault();
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            }
+          }}
+          className={`justify-self-start rounded-none px-4.5 py-2 font-display font-bold text-[20px] tracking-[-0.02em] transition-colors duration-500 select-none ${logoClasses}`}
         >
           Mahdeen Reza Amin
         </Link>
@@ -190,7 +196,7 @@ export default function Navbar() {
             transition={{ duration: 0.3, ease: EASE_OUT_EXPO }}
             className="md:hidden overflow-hidden bg-cream border-b border-border"
           >
-            <div className="px-6 py-5 flex flex-col gap-1">
+            <div className="px-6 py-5 flex flex-col gap-2">
               {NAV_LINKS.map((link) => {
                 const isProjects = link.label === "PROJECTS";
                 return (
