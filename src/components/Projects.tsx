@@ -14,43 +14,49 @@ import ProjectCard from "@/components/ProjectCard";
 
 /* ── Metrics data ── */
 const METRICS = [
-  { value: "$6-fig", label: "Cost rationalization", icon: "cost" as const, color: "#C2884D" },
-  { value: "100%", label: "SOX ITGC pass rate", icon: "compliance" as const, color: "#2D6A5D" },
-  { value: "60+", label: "Systems managed", icon: "systems" as const, color: "#8B6544" },
-  { value: "3+", label: "Years in SaaS ops", icon: "experience" as const, color: "#B5654A" },
-  { value: "—", label: "Coming soon", icon: "experience" as const, color: "#B5654A" },
+  { value: "$500K+", label: "Systems rationalization savings", icon: "cost" as const },
+  { value: "100%", label: "SOX ITGC pass rate to date", icon: "compliance" as const },
+  { value: "60+", label: "Systems portfolio managed", icon: "systems" as const },
+  { value: "8%+", label: "License utilization lift", icon: "utilization" as const },
+  { value: "3", label: "Years in SaaS IS", icon: "experience" as const },
 ];
 
 /* ── Metric SVG icons ── */
-function MetricIcon({ type, color }: { type: "cost" | "compliance" | "systems" | "experience"; color: string }) {
+function MetricIcon({ type }: { type: "cost" | "compliance" | "systems" | "utilization" | "experience" }) {
   const paths: Record<string, React.ReactNode> = {
     cost: (
-      <path
-        d="M4 4v16h16M8 14l3-3 2 2 5-5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
+      <>
+        <path d="M4 4v16h16" stroke="#6B6B6B" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M8 14l3-3 2 2 5-5" stroke="#2D6A5D" strokeLinecap="round" strokeLinejoin="round" />
+      </>
     ),
     compliance: (
-      <path
-        d="M12 3l8 4v5c0 5-3.5 9.7-8 11-4.5-1.3-8-6-8-11V7l8-4zm-2 10l2 2 4-4"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
+      <>
+        <path d="M12 3l8 4v5c0 5-3.5 9.7-8 11-4.5-1.3-8-6-8-11V7l8-4z" stroke="#2D6A5D" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M10 13l2 2 4-4" stroke="#B5654A" strokeLinecap="round" strokeLinejoin="round" />
+      </>
     ),
     systems: (
       <>
-        <rect x="3" y="3" width="7" height="7" rx="1" />
-        <rect x="14" y="3" width="7" height="7" rx="1" />
-        <rect x="3" y="14" width="7" height="7" rx="1" />
-        <rect x="14" y="14" width="7" height="7" rx="1" />
-        <path d="M10 6.5h4M6.5 10v4M17.5 10v4M10 17.5h4" strokeLinecap="round" />
+        <rect x="3" y="3" width="7" height="7" rx="1" stroke="#C2884D" />
+        <rect x="14" y="3" width="7" height="7" rx="1" stroke="#C2884D" />
+        <rect x="3" y="14" width="7" height="7" rx="1" stroke="#C2884D" />
+        <rect x="14" y="14" width="7" height="7" rx="1" stroke="#C2884D" />
+        <path d="M10 6.5h4M6.5 10v4M17.5 10v4M10 17.5h4" stroke="#8B6544" strokeLinecap="round" />
+      </>
+    ),
+    utilization: (
+      <>
+        <rect x="4" y="14" width="3" height="6" rx="0.5" stroke="#8B6544" />
+        <rect x="10.5" y="10" width="3" height="10" rx="0.5" stroke="#8B6544" />
+        <rect x="17" y="6" width="3" height="14" rx="0.5" stroke="#8B6544" />
+        <path d="M6 5l4-2m0 0l-1.5 2M10 3l1.5 2" stroke="#2D6A5D" strokeLinecap="round" strokeLinejoin="round" />
       </>
     ),
     experience: (
       <>
-        <circle cx="12" cy="12" r="9" />
-        <path d="M12 7v5l3 3" strokeLinecap="round" strokeLinejoin="round" />
+        <circle cx="12" cy="12" r="9" stroke="#B5654A" />
+        <path d="M12 7v5l3 3" stroke="#C2884D" strokeLinecap="round" strokeLinejoin="round" />
       </>
     ),
   };
@@ -61,10 +67,8 @@ function MetricIcon({ type, color }: { type: "cost" | "compliance" | "systems" |
       height="28"
       viewBox="0 0 24 24"
       fill="none"
-      stroke="currentColor"
       strokeWidth="1.5"
       className="shrink-0"
-      style={{ color }}
       initial={{ opacity: 0, scale: 0.8 }}
       whileInView={{ opacity: 1, scale: 1 }}
       viewport={{ once: true }}
@@ -91,7 +95,7 @@ export default function Projects({
   return (
     <section
       id="projects"
-      className="bg-warm-sand flex flex-col scroll-mt-16 pt-12 pb-20 md:pt-16 md:pb-28"
+      className="bg-warm-sand flex flex-col scroll-mt-16 pt-10 pb-16 md:pt-16 md:pb-28"
     >
       <div className="px-6 md:px-12 lg:px-20 w-full">
         {/* Section header */}
@@ -157,7 +161,7 @@ export default function Projects({
           whileInView="visible"
           viewport={{ once: true }}
           variants={staggerContainer}
-          className="grid grid-cols-2 md:grid-cols-5 gap-4 md:gap-6 mt-16"
+          className="flex flex-wrap justify-evenly gap-y-6 mt-16"
         >
           {METRICS.map((metric) => (
             <motion.div
@@ -165,12 +169,12 @@ export default function Projects({
               variants={fadeUpSubtle}
               className="flex items-center gap-3"
             >
-              <MetricIcon type={metric.icon} color={metric.color} />
+              <MetricIcon type={metric.icon} />
               <div>
-                <span className="block font-display font-bold text-[clamp(22px,2.5vw,30px)] tracking-[-0.03em] text-terracotta leading-none">
+                <span className="block font-display font-bold text-[clamp(25px,2.9vw,35px)] tracking-[-0.03em] text-terracotta leading-none">
                   {metric.value}
                 </span>
-                <span className="block font-body text-[13px] text-charcoal tracking-[0.02em] leading-[1.4] mt-1">
+                <span className="block font-body text-[15px] text-charcoal tracking-[0.02em] leading-[1.4] mt-1">
                   {metric.label}
                 </span>
               </div>

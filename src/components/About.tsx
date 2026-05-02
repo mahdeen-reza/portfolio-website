@@ -56,7 +56,7 @@ export default function About() {
             ? {}
             : { scale, borderRadius }
         }
-        className="bg-warm-sand min-h-[calc(85vh-54px)] flex flex-col pt-12 pb-20 md:pt-16 md:pb-28 origin-center"
+        className="bg-warm-sand min-h-[calc(85vh-54px)] flex flex-col pt-10 pb-16 md:pt-16 md:pb-28 origin-center"
       >
         <div className="max-w-[1600px] mx-auto px-6 md:px-12 lg:px-20 w-full">
           {/* Section heading */}

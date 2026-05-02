@@ -409,7 +409,7 @@ const SKILL_CONTAINERS: SkillContainer[] = [
 
 export default function Skills() {
   return (
-    <section id="skills" className="bg-white min-h-[calc(85vh-54px)] flex flex-col scroll-mt-16 pt-12 pb-20 md:pt-16 md:pb-28">
+    <section id="skills" className="bg-white min-h-[calc(85vh-54px)] flex flex-col scroll-mt-16 pt-10 pb-16 md:pt-16 md:pb-28">
       <div className="max-w-[1600px] mx-auto px-6 md:px-12 lg:px-20 w-full">
         {/* Section heading */}
         <motion.h2

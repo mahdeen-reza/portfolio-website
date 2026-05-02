@@ -182,7 +182,7 @@ The contracts source of truth is updated with the revised license count, cost, a
 export default function WorkflowPage() {
   return (
     <main className="pt-16 bg-warm-sand">
-      <article id="case-study" className="bg-warm-sand pt-12 pb-20 md:pt-16 md:pb-28">
+      <article id="case-study" className="bg-warm-sand pt-10 pb-16 md:pt-16 md:pb-28">
         <div className="max-w-[1600px] mx-auto px-6 md:px-12 lg:px-20 w-full">
           {/* Back link */}
           <Link
