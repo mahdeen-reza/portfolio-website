@@ -2,13 +2,13 @@
 
 html {
   scrollbar-gutter: stable;
+  scroll-behavior: smooth;
 }
 
 /* ── Design Tokens ── */
 @theme inline {
   /* Colors */
   --color-cream: #FAF9F6;
-  --color-cream-dark: #D5CEC2;
   --color-warm-sand: #DBD6C9;
   --color-sand-light: #E5E1D5;
   --color-dark: #1A1A1A;
@@ -55,10 +55,6 @@ html {
 }
 
 /* ── Global Styles ── */
-html {
-  scroll-behavior: smooth;
-}
-
 .scrollbar-hide {
   scrollbar-width: none;
   -ms-overflow-style: none;

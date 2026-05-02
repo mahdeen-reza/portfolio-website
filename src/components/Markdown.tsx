@@ -18,7 +18,7 @@ export default function Markdown({ content }: { content: string }) {
           ),
           p: ({ children, node }) => {
             const hasImg = node?.children?.some(
-              (child: any) =>
+              (child: { type: string; tagName?: string }) =>
                 child.type === "element" && child.tagName === "img"
             );
             if (hasImg) return <>{children}</>;

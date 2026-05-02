@@ -145,6 +145,7 @@ export default function Navbar() {
                 key={link.label}
                 href={link.href}
                 onClick={isProjects ? handleProjectsClick : undefined}
+                // TODO: hover:${textColor} is dynamically constructed — Tailwind v4 can't detect hover:text-white from this template literal, so hover color is broken when isDark is true. Fix: use a ternary with literal class strings.
                 className={`group relative font-body text-[16px] font-medium tracking-[0.04em] transition-colors duration-500 select-none hover:${textColor} ${textMutedColor}`}
               >
                 {link.label}

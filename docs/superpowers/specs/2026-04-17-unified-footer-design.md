@@ -1,5 +1,7 @@
 # Unified Footer — Design Spec
 
+> **Status: Completed.** Footer.tsx rewritten as unified component. Contact.tsx deleted. page.tsx updated.
+
 ## Context
 
 The current site has a separate Contact section (`Contact.tsx` in `page.tsx`) and a minimal Footer (`Footer.tsx` in `layout.tsx`). These overlap in purpose and content. This redesign merges them into a single, bold unified footer inspired by Eduard Bodak's site — black background, generous spacing, structured columns.

@@ -5,17 +5,18 @@
 ```
 RootLayout (Server Component)
 ├── <html> with font CSS variables (--font-clash, --font-switzer)
-├── Preloader (Client) — full-screen overlay, sessionStorage-gated
-├── Navbar (Client) — sticky, scroll-aware bg transition
-├── {children}
-│   └── HomePage (Server)
-│       ├── Hero (Client) — 2-col, animated heading, photo placeholder
-│       ├── Marquee (Server) — CSS-only infinite scroll
-│       ├── Projects (Client) — dark bg, staggered card reveals
-│       │   └── ProjectCard (Client) × 4 — hover states, Link to case study
-│       ├── About (Client) — scroll reveal, skills grid
-│       └── Contact (Client) — scroll reveal, CTA links
-└── Footer (Server) — static, cream bg
+├── ProjectsOverlayProvider (Client) — context for overlay state
+│   ├── Navbar (Client) — sticky, scroll-aware bg transition
+│   ├── {children}
+│   │   └── HomePage (Server)
+│   │       ├── Preloader (Client) — full-screen overlay, sessionStorage-gated
+│   │       ├── Hero (Client) — 2-col, animated heading, photo, floating tags
+│   │       ├── Projects (Client) — warm sand bg, staggered card reveals, impact metrics
+│   │       │   └── ProjectCard (Client) × featured — hover states, Link to case study
+│   │       ├── Skills (Client) — 3-column grid, domain/tools/technical
+│   │       └── About (Client) — scroll reveal, bio, portrait, hobbies
+│   ├── Footer (Client) — dark bg, unified contact/nav/clock
+│   └── ProjectsOverlay (Client) — slide-in panel for all projects
 ```
 
 ## Routing
@@ -23,7 +24,9 @@ RootLayout (Server Component)
 | Route | File | Type |
 |-------|------|------|
 | `/` | `src/app/page.tsx` | Server Component (children are client) |
+| `/projects` | `next.config.ts` redirect | 301 → `/` |
 | `/projects/[slug]` | `src/app/projects/[slug]/page.tsx` | Server Component with generateStaticParams |
+| `/projects/saas-renewal-operations/workflow` | `src/app/projects/saas-renewal-operations/workflow/page.tsx` | Server Component |
 
 All 4 case study slugs are statically generated at build time via `generateStaticParams()`.
 
@@ -35,6 +38,18 @@ src/lib/projects.ts (single source of truth)
     ├── src/components/Projects.tsx → renders ProjectCard for each project
     ├── src/components/ProjectCard.tsx → links to /projects/{slug}
     └── src/app/projects/[slug]/page.tsx → looks up project by slug, renders case study
+```
+
+src/context/ProjectsOverlayContext.tsx (overlay state management)
+    ↓
+    ├── src/components/Navbar.tsx → "Projects" link opens overlay
+    ├── src/components/Projects.tsx → "View all projects" button opens overlay
+    └── src/components/ProjectsOverlay.tsx → renders overlay panel
+
+src/lib/usePreloaderDone.ts (preloader → hero coordination)
+    ↓
+    ├── src/components/Preloader.tsx → calls markPreloaderDone()
+    └── src/components/Hero.tsx → usePreloaderDone() to start animations
 ```
 
 No API routes. No database. No CMS. All content is in TypeScript files.
@@ -59,15 +74,15 @@ Tailwind utilities: font-display, font-body → usable in all components
 
 | Type | Tool | Location |
 |------|------|----------|
-| Scroll reveals | motion `whileInView` | `<ScrollReveal>` wrapper component |
+| Scroll reveals | motion `whileInView` | Inline on each component |
 | Page entrance | motion `AnimatePresence` | Preloader, Hero |
 | Hover states | Tailwind CSS transitions | Inline classes on components |
-| Marquee | CSS `@keyframes` | globals.css + Marquee component |
 | Parallax | motion `useScroll` + `useTransform` | Hero photo |
+| Overlay scroll zoom | motion `useScroll` + `useTransform` | ProjectsOverlay card scale/opacity |
 
 Shared animation variants (easing, duration, fadeUp, stagger) are centralized in `src/lib/animations.ts` to ensure consistency.
 
-**Standard easing:** `[0.19, 1, 0.22, 1]` (expo out) — used everywhere.
+**Easing curves:** `[0.33, 1, 0.68, 1]` (smooth) — page elements. `[0.19, 1, 0.22, 1]` (expo out) — preloader. `[0.25, 0.46, 0.45, 0.94]` (snappy) — fast animations.
 
 ## Design Token Architecture
 
@@ -88,7 +103,7 @@ No `tailwind.config.ts` needed. Tailwind v4 reads `@theme` blocks directly from 
 
 - **Typography:** All headings use `clamp()` for fluid scaling (no breakpoint jumps)
 - **Layout:** CSS Grid / Flexbox with Tailwind responsive prefixes (md:, lg:)
-- **Container:** `max-w-[1200px] mx-auto px-6 md:px-12 lg:px-16`
+- **Container:** `max-w-[1600px] mx-auto px-6 md:px-12 lg:px-20 w-full`
 - **Nav:** Full links on desktop (md+), hamburger menu on mobile
 - **Hero:** 2-col grid on lg+, single column stacked on mobile
 
