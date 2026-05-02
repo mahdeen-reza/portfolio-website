@@ -11,6 +11,7 @@ export interface Project {
   tags: string[];
   github?: string;
   demo?: string;
+  processMap?: string;
   featured?: boolean;
   impact?: string;
   cardTags?: string[];
@@ -18,7 +19,11 @@ export interface Project {
   role: string;
   status: string;
   techStack: string[];
+  builtWith?: string;
+  lastUpdated: string;
+  techStackFooter?: string;
   fileTree?: string;
+  wideLayout?: boolean;
   sections: CaseStudySection[];
 }
 
@@ -37,15 +42,19 @@ export const projects: Project[] = [
     name: "License Clean-Up Agent",
     slug: "license-cleanup-agent",
     description:
-      "AI-powered internal tool automating Salesforce license analysis across 5 instances.",
+      "Full-stack tool automating license clean-up cycles — analysis, classification, and audit trail.",
     tags: ["TypeScript", "Express 5", "React 19", "PostgreSQL", "Claude API"],
-    github: "https://github.com/mahdeen-reza/license-cleanup-agent-demo",
+    github: "https://github.com/mahdeen-reza/license-cleanup-agent",
+    demo: "https://license-cleanup-agent.onrender.com",
     featured: true,
-    impact: "Identified six-figure savings in unused licenses",
-    cardTags: ["Vibe-Coded", "Claude Code", "TypeScript", "React"],
+    impact: "Cut clean-up cycles from a full business day to under 2 hours — with a full audit trail",
+    cardTags: ["Vibe-Coded", "Claude Code", "TypeScript", "React 19", "PostgreSQL"],
     screenshot: "/projects/license-cleanup-agent.png",
+    builtWith: "Claude Code",
+    techStackFooter: "Vibe-coded with Claude Code",
     role: "Solo builder — architecture through deployment",
-    status: "Phase 1 complete, Phase 2 infrastructure ready",
+    status: "Production — Phase 2 infrastructure ready",
+    lastUpdated: "May 2026",
     techStack: [
       "TypeScript",
       "Node.js",
@@ -89,7 +98,9 @@ The operational cost wasn't just analyst time. It was the institutional risk of 
         heading: "My Role",
         body: `I designed and built the entire system end to end -- sole architect, developer, domain expert, and product owner. This was not a delegated engineering task with requirements handed down. I authored the product requirements, defined all business rules and classification logic, designed the database schema and system architecture, built the full-stack application, and deployed it to production.
 
-The domain knowledge -- how clean-ups actually work, what the edge cases are, which mistakes are expensive -- came from doing the manual process myself. The tool encodes that operational experience into a system that can be run by anyone with the right access.`,
+The domain knowledge -- how clean-ups actually work, what the edge cases are, which mistakes are expensive -- came from doing the manual process myself. The tool encodes that operational experience into a system that can be run by anyone with the right access.
+
+The entire application was vibe-coded with Claude Code -- every component built through directed, iterative prompting grounded in the planning documents and domain logic I had already specified. Architecture, business rules, classification edge cases, and schema design were mine. Claude Code translated that specification into working code.`,
       },
       {
         heading: "Approach",
@@ -102,11 +113,15 @@ The domain knowledge -- how clean-ups actually work, what the edge cases are, wh
 
 By the time I started building, every classification rule, edge case, and data flow was already specified. The documents evolved as the build progressed -- they were working references, not one-time planning artifacts.
 
-The design philosophy was conservative throughout: when in doubt, route to Human Review. Incorrectly removing a user (disrupted work, re-provisioning, escalation) always costs more than leaving one extra license seat occupied for another cycle.`,
+The design philosophy was conservative throughout: when in doubt, route to Human Review. Incorrectly removing a user (disrupted work, re-provisioning, escalation) always costs more than leaving one extra license seat occupied for another cycle.
+
+The planning documents doubled as persistent context for Claude Code. CLAUDE.md was auto-loaded at the start of every development session -- architecture decisions, schema definitions, classification rules, and implementation status carried forward automatically. Each build cycle followed the same loop: specify the requirement against the planning docs, review Claude Code's output, validate against known datasets, iterate.`,
       },
       {
         heading: "Architecture",
-        body: `The system is a single-container web application: a React SPA served by Express, with PostgreSQL handling all persistence. The analysis pipeline runs in 16 steps, from CSV parsing through AI reasoning to delta comparison.
+        body: `![Pipeline Architecture](/projects/license-cleanup-agent-architecture.svg)
+
+The system is a single-container web application: a React SPA served by Express, with PostgreSQL handling all persistence. The analysis pipeline runs in 16 steps, from CSV parsing through AI reasoning to delta comparison.
 
 ### Input Layer
 
@@ -145,7 +160,7 @@ The department classification framework protects revenue-facing users through fo
 
 ### AI Reasoning Engine
 
-The Anthropic Claude API reviews the deterministic pre-classifications, assigns confidence levels (high, medium, low), and writes a 1-2 sentence plain-English reasoning for every user. Users are batched (25 per API call) to manage token limits. The system context includes foundational knowledge, instance-specific access criteria, and prior exception data.
+The Anthropic Claude API reviews the deterministic pre-classifications, assigns confidence levels (high, medium, low), and writes a 1-2 sentence plain-English reasoning for every user. Users are batched (50 per API call) with up to 8 batches running in parallel, reducing the AI step from ~8 minutes to ~1 minute for large datasets. The static system context -- foundational knowledge, instance-specific access criteria, and prior exception data -- is cached across all batches via Anthropic's prompt caching, so only the first batch pays full input cost.
 
 When no API key is configured, the pipeline runs entirely on the deterministic classifier. Classification still works -- the AI layer adds nuance, not core functionality.
 
@@ -155,7 +170,17 @@ Every run after the first automatically compares against the most recent previou
 
 ### Persistence and Audit Trail
 
-Fourteen Prisma models store the full history: analysis runs, per-user results, action decisions, user history events, sporadic access flags, prior exceptions, chat overrides, access criteria versions, and conversation history. Every run, every classification, and every analyst decision is recorded with identity and timestamp.`,
+Fourteen Prisma models store the full history: analysis runs, per-user results, action decisions, user history events, sporadic access flags, prior exceptions, chat overrides, access criteria versions, and conversation history. Every run, every classification, and every analyst decision is recorded with identity and timestamp.
+
+### Production Hardening
+
+The initial synchronous pipeline timed out on large datasets -- 1700+ users generating 34+ sequential API batches took 8-10 minutes, exceeding reverse proxy timeouts. Three changes solved this.
+
+The analysis endpoint now returns 202 immediately with a run ID. The pipeline runs in the background, updating a status field at each stage. The frontend polls for progress every 3 seconds, showing real-time updates ("AI reasoning: batch 5 of 34"). A concurrent run guard prevents overlapping analyses, and stale runs auto-expire after 20 minutes.
+
+AI reasoning batches run 8 at a time through a worker-pool pattern instead of sequentially. Combined with prompt caching on the static system context -- where the first batch pays full input cost and subsequent batches pay roughly 10% for the cached portion -- the AI step dropped from ~8 minutes to under a minute.
+
+The review workflow now persists checkbox state to the database in real time. Analysts can pause a review, close the browser, and resume later without losing progress. A submission modal pre-fills the support ticket content, opens the ticketing portal, and records the ticket number to finalize the run. Each run moves through a clear lifecycle: processing, review in progress, submitted.`,
       },
       {
         heading: "The Hard Problems",
@@ -207,7 +232,9 @@ The time savings matter, but the bigger shift is structural. The process is now 
         heading: "What's Next",
         body: `**Phase 2 is infrastructure-ready.** The self-serve system onboarding flow -- upload a sample CSV, provide a description, review the AI-generated reasoning table, confirm -- is already built. Expanding to additional SaaS systems requires no engineering work, just an analyst with a CSV and five minutes.
 
-Beyond that: automated ticket submission post-analysis (removing the copy-paste step), automated data loading from platform APIs (removing the manual CSV export), and eventually a fully hands-off pipeline that a support team member can operate without analyst handover.`,
+Since the initial build, three production bottlenecks have been resolved. The analysis pipeline now runs asynchronously with real-time progress tracking -- eliminating the timeout failures that occurred on large datasets. The ticket submission step is no longer a manual copy-paste -- a pre-filled modal generates the content and opens the ticketing portal directly. And review state persists across sessions, so analysts can pause and resume without losing progress.
+
+Beyond that: automated data loading from platform APIs (removing the manual CSV export) and eventually a fully hands-off pipeline that a support team member can operate without analyst handover.`,
       },
     ],
   },
@@ -221,11 +248,12 @@ Beyond that: automated ticket submission post-analysis (removing the copy-paste 
     github: "https://github.com/mahdeen-reza/saas-license-monitor",
     demo: "https://mahdeen-reza.github.io/saas-license-monitor",
     featured: true,
-    impact: "Replaced manual monthly tracking with automated daily monitoring",
-    cardTags: ["BigQuery", "Looker", "SQL", "Fivetran"],
+    impact: "Replaced manual per-system checks with a single dashboard and automated daily alerting",
+    cardTags: ["SQL", "BigQuery", "Looker", "Fivetran"],
     screenshot: "/projects/saas-license-monitor.png",
-    role: "Sole designer and builder — architecture, SQL, LookML, alerting, documentation",
+    role: "Sole designer and builder end-to-end",
     status: "Phase 1 live · Phase 2 designed and documented",
+    lastUpdated: "May 2026",
     techStack: [
       "SQL",
       "Google BigQuery",
@@ -334,12 +362,15 @@ Phase 2 adds a different challenge: tools without a Fivetran connector and possi
     number: "03",
     name: "SOX Access Review Controls",
     slug: "sox-access-review-controls",
+    wideLayout: true,
     description:
       "Audit infrastructure for SOX ITGC compliance with cell-level edit tracking.",
     tags: ["Google Apps Script", "Google Sheets", "SOX", "Compliance"],
     github: "https://github.com/mahdeen-reza/systems-governance-toolkit",
+    impact: "Live enforcement and cell-level audit trail — 100% ITGC pass rate since deployment",
     role: "Compliance Engineer",
     status: "Live — deployed across access review cycles",
+    lastUpdated: "May 2026",
     techStack: [
       "JavaScript",
       "Google Apps Script",
@@ -527,11 +558,15 @@ Key design decision: the audit function is called *before* the enforcement funct
     number: "04",
     name: "SaaS Renewal Operations",
     slug: "saas-renewal-operations",
+    wideLayout: true,
     description:
-      "End-to-end process architecture across a 60+ system portfolio.",
+      "Formalized a 60+ system renewal function from scratch — structured workflow, portal, and decision records replacing tribal knowledge.",
     tags: ["Process Design", "Operations", "Governance"],
+    impact: "Renewals became delegable — documented process, portal, and decision records replaced tribal knowledge",
     role: "Sole Designer and Implementer",
     status: "Ongoing",
+    lastUpdated: "May 2026",
+    processMap: "/projects/saas-renewal-operations/workflow",
     techStack: [
       "Process Design",
       "Operations",
@@ -596,7 +631,15 @@ Two end-to-end process maps — one governing renewals, one governing seat and l
 
 The renewal cycle triggers at 70 days. The expansion cycle triggers when a product manager submits a request through the Systems Governance portal. Both share a mandatory finance validation gate and a structured analysis phase that protects the work needed to make informed, defensible decisions before any commercial or procurement action is taken.
 
-[→ Full workflow documentation: step-by-step process guide](/projects/saas-renewal-operations/workflow)
+**Tool Renewal Process Map**
+
+![Tool Renewal Process Map](/projects/saas-renewal-process-map.svg)
+
+**Tool Expansion Process Map**
+
+![Tool Expansion Process Map](/projects/saas-expansion-process-map.svg)
+
+[→ Full process map and workflow documentation](/projects/saas-renewal-operations/workflow)
 
 ### Layer 2 — The Tooling Layer
 

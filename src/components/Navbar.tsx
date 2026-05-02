@@ -131,7 +131,7 @@ export default function Navbar() {
               window.scrollTo({ top: 0, behavior: "smooth" });
             }
           }}
-          className={`justify-self-start rounded-none px-4.5 py-2 font-display font-bold text-[20px] tracking-[-0.02em] transition-colors duration-500 select-none ${logoClasses}`}
+          className={`justify-self-start rounded-none px-3 py-1.5 md:px-4.5 md:py-2 font-display font-bold text-[15px] md:text-[20px] tracking-[-0.02em] transition-colors duration-500 select-none ${logoClasses}`}
         >
           Mahdeen Reza Amin
         </Link>
@@ -165,7 +165,7 @@ export default function Navbar() {
         {/* Mobile hamburger */}
         <button
           onClick={() => setMenuOpen(!menuOpen)}
-          className="md:hidden justify-self-end flex flex-col justify-center items-center w-11 h-11 -mr-1.5 gap-1.5 select-none"
+          className="md:hidden col-start-3 justify-self-end flex flex-col justify-center items-center w-11 h-11 -mr-1.5 gap-1.5 select-none"
           aria-label={menuOpen ? "Close menu" : "Open menu"}
         >
           <span

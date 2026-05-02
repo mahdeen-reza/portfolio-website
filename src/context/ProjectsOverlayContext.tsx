@@ -1,6 +1,7 @@
 "use client";
 
-import { createContext, useContext, useState, useCallback, useRef } from "react";
+import { createContext, useContext, useState, useCallback, useRef, useEffect, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import type { ReactNode } from "react";
 
 interface ProjectsOverlayContextValue {
@@ -11,6 +12,23 @@ interface ProjectsOverlayContextValue {
 }
 
 const ProjectsOverlayContext = createContext<ProjectsOverlayContextValue | null>(null);
+
+function OpenFromSearchParam({ open }: { open: () => void }) {
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    if (searchParams.get("projects") === "open") {
+      const url = new URL(window.location.href);
+      url.searchParams.delete("projects");
+      window.history.replaceState(history.state, "", url.toString());
+
+      const timer = setTimeout(() => open(), 100);
+      return () => clearTimeout(timer);
+    }
+  }, [searchParams, open]);
+
+  return null;
+}
 
 export function ProjectsOverlayProvider({ children }: { children: ReactNode }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -30,6 +48,9 @@ export function ProjectsOverlayProvider({ children }: { children: ReactNode }) {
 
   return (
     <ProjectsOverlayContext value={{ isOpen, open, close, triggerRef }}>
+      <Suspense fallback={null}>
+        <OpenFromSearchParam open={open} />
+      </Suspense>
       {children}
     </ProjectsOverlayContext>
   );

@@ -161,7 +161,7 @@ export default function Projects({
           whileInView="visible"
           viewport={{ once: true }}
           variants={staggerContainer}
-          className="flex flex-wrap justify-evenly gap-y-6 mt-16"
+          className="grid grid-cols-2 gap-y-6 gap-x-4 md:flex md:flex-wrap md:justify-evenly mt-16"
         >
           {METRICS.map((metric) => (
             <motion.div

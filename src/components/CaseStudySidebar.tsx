@@ -14,6 +14,7 @@ interface CaseStudySidebarProps {
   sections: CaseStudySection[];
   fileTree?: string;
   scrollContainerId?: string;
+  techStackFooter?: string;
 }
 
 export default function CaseStudySidebar({
@@ -21,6 +22,7 @@ export default function CaseStudySidebar({
   sections,
   fileTree,
   scrollContainerId,
+  techStackFooter,
 }: CaseStudySidebarProps) {
   const [activeId, setActiveId] = useState("");
   const [progress, setProgress] = useState(0);
@@ -186,6 +188,14 @@ export default function CaseStudySidebar({
             </motion.li>
           ))}
         </ul>
+        {techStackFooter && (
+          <motion.p
+            variants={fadeUpSubtle}
+            className="font-body text-[13px] italic text-muted mt-3 pt-3 border-t border-dark/10"
+          >
+            {techStackFooter}
+          </motion.p>
+        )}
       </motion.div>
 
       {/* Table of Contents */}

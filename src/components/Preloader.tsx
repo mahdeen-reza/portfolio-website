@@ -5,12 +5,18 @@ import { motion, AnimatePresence } from "motion/react";
 import { EASE_OUT_EXPO } from "@/lib/animations";
 import { markPreloaderDone, isPreloaderDone } from "@/lib/usePreloaderDone";
 
+const SESSION_KEY = "preloader-shown";
+
 export default function Preloader() {
   const [show, setShow] = useState(false);
   const [phase, setPhase] = useState<"fade-in" | "exit">("fade-in");
 
   useEffect(() => {
     if (isPreloaderDone()) return;
+    if (sessionStorage.getItem(SESSION_KEY)) {
+      markPreloaderDone();
+      return;
+    }
 
     document.body.style.overflow = "hidden";
     setShow(true);
@@ -18,7 +24,10 @@ export default function Preloader() {
     // Phase 1: fade-in (1.0s) → Phase 2: exit slide-up (1.8s)
     const exitTimer = setTimeout(() => setPhase("exit"), 1000);
     // Trigger hero animations 0.5s into exit (overlay ~30% moved, content starts revealing)
-    const heroTimer = setTimeout(() => markPreloaderDone(), 1000 + 500);
+    const heroTimer = setTimeout(() => {
+      markPreloaderDone();
+      sessionStorage.setItem(SESSION_KEY, "1");
+    }, 1000 + 500);
     const removeTimer = setTimeout(() => {
       setShow(false);
       document.body.style.overflow = "";
