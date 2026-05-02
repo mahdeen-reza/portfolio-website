@@ -8,18 +8,21 @@ import { markPreloaderDone, isPreloaderDone } from "@/lib/usePreloaderDone";
 const SESSION_KEY = "preloader-shown";
 
 export default function Preloader() {
-  const [show, setShow] = useState(false);
+  const [show, setShow] = useState(true);
   const [phase, setPhase] = useState<"fade-in" | "exit">("fade-in");
 
   useEffect(() => {
-    if (isPreloaderDone()) return;
+    if (isPreloaderDone()) {
+      setShow(false);
+      return;
+    }
     if (sessionStorage.getItem(SESSION_KEY)) {
       markPreloaderDone();
+      setShow(false);
       return;
     }
 
     document.body.style.overflow = "hidden";
-    setShow(true);
 
     // Phase 1: fade-in (1.0s) → Phase 2: exit slide-up (1.8s)
     const exitTimer = setTimeout(() => setPhase("exit"), 1000);
